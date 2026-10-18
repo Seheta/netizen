@@ -124,6 +124,9 @@ async def main() -> None:
                 return await run_case(client, c, general, fams, influencers)
         res = await asyncio.gather(*(guarded(c) for c in cases))
 
+    # Saved before the report: a print failure (e.g. emoji on a cp1252 console) must not lose paid results.
+    out = ROOT / "results" / f"backtest_youtube_{datetime.now():%Y%m%d_%H%M%S}.json"
+    out.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     gaps = {name: [] for name in SCENARIOS}
     kgaps = {name: [] for name in SCENARIOS}
     short = lambda m: "  ".join(f"{k.split('_')[0][:3]}{'-' + k.split('_')[1][:2] if '_' in k else ''} {m.get(k, 0):.0%}"
@@ -146,8 +149,6 @@ async def main() -> None:
     print("\nMean stance gap (real labeled by kinds): " + "  ".join(f"{n} {sum(g) / len(g):.3f}" for n, g in gaps.items()))
     print("Mean comment-kind gap:                   " + "  ".join(f"{n} {sum(g) / len(g):.3f}" for n, g in kgaps.items()))
     tokens = sum(r["tokens"] for r in res)
-    out = ROOT / "results" / f"backtest_youtube_{datetime.now():%Y%m%d_%H%M%S}.json"
-    out.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Total input tokens {tokens:,} ≈ ${tokens * PRICE_PER_MTOK / 1e6:.4f} | raw: {out}")
 
 
