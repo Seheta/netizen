@@ -1,0 +1,225 @@
+[
+  {
+    "id": "i_artis",
+    "label": "Artis sinetron & film papan atas",
+    "followers_total": "25 juta",
+    "platforms": [
+      "Instagram",
+      "TikTok"
+    ],
+    "archetype": "artis / selebriti TV",
+    "content": "kehidupan keluarga, behind the scene syuting, endorse produk rumah tangga dan kecantikan",
+    "persona": "citra ramah dan aman, jarang bicara politik atau kebijakan, sering menerima endorsement berbayar",
+    "language_style": "hangat, banyak emoji, sapaan 'guys' dan 'sayang-sayangku'",
+    "followers": {
+      "p01_emak": 0.6,
+      "p02_mahasiswa": 0.1,
+      "p03_ojol": 0.3,
+      "p04_jaksel": 0.3,
+      "p05_pns": 0.25,
+      "p06_kol": 0.05,
+      "p07_genz": 0.5,
+      "p08_religius": 0.35,
+      "p09_lurker": 0.3,
+      "p10_buzzer": 0.0,
+      "p11_media": 0.3,
+      "p12_karyawan": 0.2,
+      "p13_edukatif": 0.1,
+      "p14_pendukung": 0.6,
+      "p15_boomer": 0.5,
+      "p16_petani": 0.4
+    }
+  },
+  {
+    "id": "i_selebgram",
+    "label": "Selebgram lifestyle & beauty Jakarta",
+    "followers_total": "3 juta",
+    "platforms": [
+      "Instagram",
+      "TikTok",
+      "X/Twitter"
+    ],
+    "archetype": "selebgram / beauty influencer",
+    "content": "review skincare dan makeup, OOTD, kafe dan kuliner kekinian, vlog keseharian",
+    "persona": "dianggap jujur kalau review, tapi juga sering kena sindir karena endorse; pengikut setia dari perempuan muda urban",
+    "language_style": "bahasa Jaksel, campur Inggris, santai",
+    "followers": {
+      "p01_emak": 0.15,
+      "p02_mahasiswa": 0.1,
+      "p03_ojol": 0.02,
+      "p04_jaksel": 0.7,
+      "p05_pns": 0.02,
+      "p06_kol": 0.05,
+      "p07_genz": 0.55,
+      "p08_religius": 0.05,
+      "p09_lurker": 0.05,
+      "p10_buzzer": 0.0,
+      "p11_media": 0.2,
+      "p12_karyawan": 0.15,
+      "p13_edukatif": 0.05,
+      "p14_pendukung": 0.2,
+      "p15_boomer": 0.05,
+      "p16_petani": 0.2
+    }
+  },
+  {
+    "id": "i_kol_ekonomi",
+    "label": "KOL ekonomi & keuangan pribadi",
+    "followers_total": "1,5 juta",
+    "platforms": [
+      "X/Twitter",
+      "Instagram",
+      "YouTube",
+      "Threads"
+    ],
+    "archetype": "KOL ekonomi / financial educator",
+    "content": "utas dan video soal gaji, pajak, investasi, dan dampak kebijakan ke dompet",
+    "persona": "dianggap kredibel dan pakai data; kritis terhadap kebijakan yang membebani pekerja, tapi tetap terukur",
+    "language_style": "edukatif santai, pakai hitungan dan grafik",
+    "followers": {
+      "p01_emak": 0.05,
+      "p02_mahasiswa": 0.35,
+      "p03_ojol": 0.05,
+      "p04_jaksel": 0.4,
+      "p05_pns": 0.1,
+      "p06_kol": 0.6,
+      "p07_genz": 0.1,
+      "p08_religius": 0.1,
+      "p09_lurker": 0.1,
+      "p10_buzzer": 0.2,
+      "p11_media": 0.5,
+      "p12_karyawan": 0.45,
+      "p13_edukatif": 0.6,
+      "p14_pendukung": 0.05,
+      "p15_boomer": 0.1,
+      "p16_petani": 0.03
+    }
+  },
+  {
+    "id": "i_kol_politik",
+    "label": "Pengamat & aktivis politik vokal",
+    "followers_total": "2 juta",
+    "platforms": [
+      "X/Twitter",
+      "YouTube",
+      "Threads"
+    ],
+    "archetype": "KOL politik / aktivis",
+    "content": "kritik kebijakan, analisis politik, utas panjang soal pejabat dan korupsi",
+    "persona": "kritis keras terhadap pemerintah dan elite; dicintai mahasiswa, dibenci buzzer",
+    "language_style": "tajam, sinis, sering pakai sarkasme",
+    "followers": {
+      "p01_emak": 0.03,
+      "p02_mahasiswa": 0.65,
+      "p03_ojol": 0.05,
+      "p04_jaksel": 0.2,
+      "p05_pns": 0.05,
+      "p06_kol": 0.4,
+      "p07_genz": 0.1,
+      "p08_religius": 0.1,
+      "p09_lurker": 0.05,
+      "p10_buzzer": 0.6,
+      "p11_media": 0.6,
+      "p12_karyawan": 0.3,
+      "p13_edukatif": 0.4,
+      "p14_pendukung": 0.15,
+      "p15_boomer": 0.4,
+      "p16_petani": 0.1
+    }
+  },
+  {
+    "id": "i_ustadz",
+    "label": "Dai / tokoh agama populer",
+    "followers_total": "10 juta",
+    "platforms": [
+      "Instagram",
+      "YouTube",
+      "TikTok",
+      "Facebook"
+    ],
+    "archetype": "tokoh agama",
+    "content": "ceramah pendek, nasihat keluarga dan rezeki, sesekali komentar isu sosial dari sudut pandang agama",
+    "persona": "dihormati dan dipercaya kalangan religius dan emak-emak; menghindari politik praktis, tapi bersuara soal moral, kemewahan, dan keadilan",
+    "language_style": "lembut, menyejukkan, kutipan ayat dan hadits",
+    "followers": {
+      "p01_emak": 0.45,
+      "p02_mahasiswa": 0.05,
+      "p03_ojol": 0.3,
+      "p04_jaksel": 0.05,
+      "p05_pns": 0.35,
+      "p06_kol": 0.02,
+      "p07_genz": 0.1,
+      "p08_religius": 0.75,
+      "p09_lurker": 0.25,
+      "p10_buzzer": 0.05,
+      "p11_media": 0.2,
+      "p12_karyawan": 0.15,
+      "p13_edukatif": 0.1,
+      "p14_pendukung": 0.6,
+      "p15_boomer": 0.8,
+      "p16_petani": 0.4
+    }
+  },
+  {
+    "id": "i_base",
+    "label": "Akun base / menfess X",
+    "followers_total": "1 juta",
+    "platforms": [
+      "X/Twitter"
+    ],
+    "archetype": "akun base / menfess",
+    "content": "kiriman anonim pengikut: curhat, tanya rekomendasi, spill pengalaman buruk dengan brand atau instansi",
+    "persona": "suara anak muda; tempat isu kecil jadi besar; bisa memviralkan pengalaman buruk maupun rekomendasi bagus",
+    "language_style": "gaul, singkatan, format 'mau tanya dong nder' dan 'spill'",
+    "followers": {
+      "p01_emak": 0.0,
+      "p02_mahasiswa": 0.55,
+      "p03_ojol": 0.02,
+      "p04_jaksel": 0.35,
+      "p05_pns": 0.0,
+      "p06_kol": 0.2,
+      "p07_genz": 0.3,
+      "p08_religius": 0.02,
+      "p09_lurker": 0.05,
+      "p10_buzzer": 0.1,
+      "p11_media": 0.3,
+      "p12_karyawan": 0.35,
+      "p13_edukatif": 0.15,
+      "p14_pendukung": 0.02,
+      "p15_boomer": 0.01,
+      "p16_petani": 0.05
+    }
+  },
+  {
+    "id": "i_meme",
+    "label": "Akun meme & humor receh",
+    "followers_total": "8 juta",
+    "platforms": [
+      "Instagram",
+      "TikTok",
+      "Facebook"
+    ],
+    "archetype": "akun meme",
+    "content": "meme dari isu yang sedang ramai, video lucu, plesetan iklan",
+    "persona": "tidak serius dan tidak memihak, tapi bisa membuat isu atau brand jadi bahan olok-olok nasional; kadang menerima endorse dalam format meme",
+    "language_style": "receh, sarkas ringan, caption singkat",
+    "followers": {
+      "p01_emak": 0.2,
+      "p02_mahasiswa": 0.45,
+      "p03_ojol": 0.35,
+      "p04_jaksel": 0.4,
+      "p05_pns": 0.1,
+      "p06_kol": 0.2,
+      "p07_genz": 0.7,
+      "p08_religius": 0.15,
+      "p09_lurker": 0.5,
+      "p10_buzzer": 0.1,
+      "p11_media": 0.2,
+      "p12_karyawan": 0.5,
+      "p13_edukatif": 0.1,
+      "p14_pendukung": 0.2,
+      "p15_boomer": 0.1,
+      "p16_petani": 0.5
+    }
+  }
+]

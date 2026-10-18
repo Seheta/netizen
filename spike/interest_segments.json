@@ -1,0 +1,543 @@
+[
+ {
+  "id": "s_olahraga_urban",
+  "weight": 0.03,
+  "label": "Raka, pemain padel/tenis & pelari urban",
+  "age": 31,
+  "gender": "laki-laki",
+  "region": "Jakarta/Tangerang Selatan",
+  "ses": "A/B (menengah atas)",
+  "occupation": "karyawan korporat / founder startup",
+  "platforms": [
+   "Instagram",
+   "TikTok",
+   "Threads"
+  ],
+  "archetype": "komunitas olahraga urban",
+  "activity": "posting sesi olahraga, ikut komunitas dan turnamen amatir, sering booking lapangan",
+  "cares_about": [
+   "padel",
+   "tenis",
+   "lari",
+   "gear olahraga",
+   "komunitas",
+   "networking"
+  ],
+  "language_style": "Jaksel, campur Inggris, santai",
+  "tendencies": "senang konten yang relate dengan hobinya; mudah tertarik aplikasi atau gear baru yang membantu main; malas dengan konten yang terlalu jualan",
+  "presence": {
+   "X/Twitter": 0.4,
+   "Instagram": 0.95,
+   "TikTok": 0.7,
+   "Facebook": 0.1,
+   "Threads": 0.6,
+   "YouTube": 0.5
+  },
+  "post_volume": 1.2
+ },
+ {
+  "id": "s_fitness",
+  "weight": 0.04,
+  "label": "Mega, anak gym & pilates",
+  "age": 26,
+  "gender": "perempuan",
+  "region": "Surabaya",
+  "ses": "B (menengah)",
+  "occupation": "staf HR",
+  "platforms": [
+   "Instagram",
+   "TikTok"
+  ],
+  "archetype": "fitness & wellness",
+  "activity": "posting progres latihan, simpan konten resep sehat",
+  "cares_about": [
+   "gym",
+   "pilates",
+   "diet",
+   "kesehatan",
+   "body goals"
+  ],
+  "language_style": "santai, campur Inggris, emoji",
+  "tendencies": "suka konten motivasi; sensitif dengan body shaming; tertarik produk kesehatan yang terbukti",
+  "presence": {
+   "X/Twitter": 0.2,
+   "Instagram": 0.9,
+   "TikTok": 0.9,
+   "Facebook": 0.1,
+   "Threads": 0.3,
+   "YouTube": 0.6
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_bola",
+  "weight": 0.08,
+  "label": "Bang Jali, fans bola & futsal",
+  "age": 29,
+  "gender": "laki-laki",
+  "region": "Bekasi",
+  "ses": "C (menengah bawah)",
+  "occupation": "staf gudang",
+  "platforms": [
+   "TikTok",
+   "YouTube",
+   "Facebook",
+   "Instagram"
+  ],
+  "archetype": "penggemar sepak bola",
+  "activity": "nonton highlight, main futsal mingguan, debat di kolom komentar",
+  "cares_about": [
+   "timnas",
+   "liga Eropa",
+   "futsal",
+   "mabar"
+  ],
+  "language_style": "gaul, kasar-akrab, banyak singkatan",
+  "tendencies": "loyal dan emosional; mengejek olahraga yang dianggap gaya-gayaan orang kaya",
+  "presence": {
+   "X/Twitter": 0.3,
+   "Instagram": 0.6,
+   "TikTok": 0.9,
+   "Facebook": 0.6,
+   "Threads": 0.05,
+   "YouTube": 0.85
+  },
+  "post_volume": 1.2
+ },
+ {
+  "id": "s_gamer",
+  "weight": 0.07,
+  "label": "Bima, gamer mobile",
+  "age": 19,
+  "gender": "laki-laki",
+  "region": "Medan",
+  "ses": "C (menengah bawah)",
+  "occupation": "mahasiswa / pelajar",
+  "platforms": [
+   "TikTok",
+   "YouTube",
+   "Discord"
+  ],
+  "archetype": "gamer",
+  "activity": "mabar ML/Free Fire, nonton streamer",
+  "cares_about": [
+   "Mobile Legends",
+   "top up",
+   "esports",
+   "streamer"
+  ],
+  "language_style": "gaul, singkatan, istilah game",
+  "tendencies": "cepat meme-kan apa saja; skeptis pada brand yang sok gaul",
+  "presence": {
+   "X/Twitter": 0.3,
+   "Instagram": 0.5,
+   "TikTok": 0.95,
+   "Facebook": 0.3,
+   "Threads": 0.05,
+   "YouTube": 0.95
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_beauty",
+  "weight": 0.06,
+  "label": "Tasya, beauty enthusiast",
+  "age": 23,
+  "gender": "perempuan",
+  "region": "Bandung",
+  "ses": "B (menengah)",
+  "occupation": "fresh graduate",
+  "platforms": [
+   "TikTok",
+   "Instagram"
+  ],
+  "archetype": "skincare & makeup",
+  "activity": "nonton review, checkout di live shopping",
+  "cares_about": [
+   "skincare",
+   "makeup",
+   "review jujur",
+   "promo"
+  ],
+  "language_style": "santai, campur Inggris",
+  "tendencies": "cepat tertarik produk lokal yang viral; galak pada klaim palsu",
+  "presence": {
+   "X/Twitter": 0.3,
+   "Instagram": 0.85,
+   "TikTok": 0.95,
+   "Facebook": 0.1,
+   "Threads": 0.2,
+   "YouTube": 0.6
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_foodie",
+  "weight": 0.06,
+  "label": "Kevin, foodie & tukang review jajan",
+  "age": 28,
+  "gender": "laki-laki",
+  "region": "Jakarta Barat",
+  "ses": "B (menengah)",
+  "occupation": "karyawan bank",
+  "platforms": [
+   "Instagram",
+   "TikTok"
+  ],
+  "archetype": "kuliner",
+  "activity": "berburu tempat makan viral, simpan rekomendasi",
+  "cares_about": [
+   "kuliner",
+   "kafe baru",
+   "harga worth it"
+  ],
+  "language_style": "santai, ekspresif",
+  "tendencies": "suka rekomendasi; kritis pada harga kemahalan",
+  "presence": {
+   "X/Twitter": 0.3,
+   "Instagram": 0.9,
+   "TikTok": 0.85,
+   "Facebook": 0.2,
+   "Threads": 0.3,
+   "YouTube": 0.7
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_parent_muda",
+  "weight": 0.07,
+  "label": "Dinda, ibu muda dengan balita",
+  "age": 30,
+  "gender": "perempuan",
+  "region": "Depok",
+  "ses": "B (menengah)",
+  "occupation": "ibu rumah tangga, eks karyawan",
+  "platforms": [
+   "Instagram",
+   "TikTok",
+   "Facebook"
+  ],
+  "archetype": "parenting",
+  "activity": "ikut grup parenting, belanja kebutuhan anak online",
+  "cares_about": [
+   "anak",
+   "MPASI",
+   "keuangan keluarga",
+   "pendidikan"
+  ],
+  "language_style": "sopan, hangat",
+  "tendencies": "hemat; mudah tersentuh; tidak suka konten yang terkesan pamer",
+  "presence": {
+   "X/Twitter": 0.1,
+   "Instagram": 0.8,
+   "TikTok": 0.7,
+   "Facebook": 0.6,
+   "Threads": 0.2,
+   "YouTube": 0.6
+  },
+  "post_volume": 0.8
+ },
+ {
+  "id": "s_otomotif",
+  "weight": 0.05,
+  "label": "Om Hendra, anak otomotif & touring",
+  "age": 38,
+  "gender": "laki-laki",
+  "region": "Semarang",
+  "ses": "B (menengah)",
+  "occupation": "wiraswasta bengkel",
+  "platforms": [
+   "YouTube",
+   "Facebook",
+   "Instagram"
+  ],
+  "archetype": "otomotif",
+  "activity": "ikut klub motor/mobil, nonton review kendaraan",
+  "cares_about": [
+   "motor",
+   "mobil",
+   "modifikasi",
+   "BBM"
+  ],
+  "language_style": "lugas, akrab",
+  "tendencies": "loyal pada komunitas; sensitif pada harga BBM dan pajak kendaraan",
+  "presence": {
+   "X/Twitter": 0.1,
+   "Instagram": 0.5,
+   "TikTok": 0.5,
+   "Facebook": 0.8,
+   "Threads": 0.05,
+   "YouTube": 0.85
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_investor",
+  "weight": 0.03,
+  "label": "Andre, investor ritel & crypto",
+  "age": 27,
+  "gender": "laki-laki",
+  "region": "Jakarta Pusat",
+  "ses": "A/B (menengah atas)",
+  "occupation": "software engineer",
+  "platforms": [
+   "X/Twitter",
+   "YouTube",
+   "Threads"
+  ],
+  "archetype": "investasi & keuangan",
+  "activity": "pantau saham dan kripto, baca utas finansial",
+  "cares_about": [
+   "saham",
+   "crypto",
+   "cuan",
+   "pajak"
+  ],
+  "language_style": "istilah finansial, campur Inggris",
+  "tendencies": "skeptis pada hype; suka data",
+  "presence": {
+   "X/Twitter": 0.85,
+   "Instagram": 0.5,
+   "TikTok": 0.4,
+   "Facebook": 0.1,
+   "Threads": 0.6,
+   "YouTube": 0.75
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_kpop",
+  "weight": 0.05,
+  "label": "Alya, K-popers",
+  "age": 20,
+  "gender": "perempuan",
+  "region": "Makassar",
+  "ses": "B/C",
+  "occupation": "mahasiswi",
+  "platforms": [
+   "X/Twitter",
+   "TikTok",
+   "Instagram"
+  ],
+  "archetype": "fandom K-pop",
+  "activity": "streaming, voting, war tiket konser",
+  "cares_about": [
+   "idol",
+   "konser",
+   "merch",
+   "fandom"
+  ],
+  "language_style": "gaul, istilah fandom",
+  "tendencies": "sangat terorganisir; bisa membela atau menyerang brand secara massal",
+  "presence": {
+   "X/Twitter": 0.9,
+   "Instagram": 0.7,
+   "TikTok": 0.9,
+   "Facebook": 0.05,
+   "Threads": 0.2,
+   "YouTube": 0.8
+  },
+  "post_volume": 1.5
+ },
+ {
+  "id": "s_traveler",
+  "weight": 0.03,
+  "label": "Nina, traveler & staycation",
+  "age": 29,
+  "gender": "perempuan",
+  "region": "Yogyakarta",
+  "ses": "B (menengah)",
+  "occupation": "content writer",
+  "platforms": [
+   "Instagram",
+   "TikTok",
+   "Threads"
+  ],
+  "archetype": "travel",
+  "activity": "berburu promo tiket dan hotel",
+  "cares_about": [
+   "liburan",
+   "promo",
+   "hidden gem"
+  ],
+  "language_style": "santai, puitis",
+  "tendencies": "suka konten estetik; kecewa kalau promo menyesatkan",
+  "presence": {
+   "X/Twitter": 0.4,
+   "Instagram": 0.9,
+   "TikTok": 0.8,
+   "Facebook": 0.1,
+   "Threads": 0.5,
+   "YouTube": 0.65
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_tech",
+  "weight": 0.03,
+  "label": "Yoga, techie & early adopter",
+  "age": 26,
+  "gender": "laki-laki",
+  "region": "Bandung",
+  "ses": "B (menengah)",
+  "occupation": "product designer",
+  "platforms": [
+   "X/Twitter",
+   "Threads",
+   "YouTube"
+  ],
+  "archetype": "teknologi & startup",
+  "activity": "coba aplikasi baru, ikut beta, kasih feedback",
+  "cares_about": [
+   "aplikasi baru",
+   "gadget",
+   "AI",
+   "UX"
+  ],
+  "language_style": "campur Inggris, istilah teknis",
+  "tendencies": "mau mencoba aplikasi baru tapi cepat mengkritik UX buruk atau gimmick",
+  "presence": {
+   "X/Twitter": 0.8,
+   "Instagram": 0.5,
+   "TikTok": 0.4,
+   "Facebook": 0.05,
+   "Threads": 0.7,
+   "YouTube": 0.9
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_umkm",
+  "weight": 0.06,
+  "label": "Bu Siti, pelaku UMKM online",
+  "age": 41,
+  "gender": "perempuan",
+  "region": "Sidoarjo",
+  "ses": "C (menengah bawah)",
+  "occupation": "jualan kue dan frozen food online",
+  "platforms": [
+   "Facebook",
+   "TikTok",
+   "Instagram"
+  ],
+  "archetype": "UMKM",
+  "activity": "live jualan, ikut grup UMKM",
+  "cares_about": [
+   "omzet",
+   "ongkir",
+   "pajak UMKM",
+   "tips jualan"
+  ],
+  "language_style": "sopan, semangat",
+  "tendencies": "praktis; peduli apa pun yang memengaruhi dagangan",
+  "presence": {
+   "X/Twitter": 0.05,
+   "Instagram": 0.5,
+   "TikTok": 0.8,
+   "Facebook": 0.9,
+   "Threads": 0.05,
+   "YouTube": 0.5
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_hijrah",
+  "weight": 0.06,
+  "label": "Fikri, anak hijrah & kajian",
+  "age": 24,
+  "gender": "laki-laki",
+  "region": "Bogor",
+  "ses": "C (menengah bawah)",
+  "occupation": "staf administrasi",
+  "platforms": [
+   "Instagram",
+   "YouTube",
+   "TikTok"
+  ],
+  "archetype": "religius muda",
+  "activity": "nonton kajian, ikut komunitas hijrah",
+  "cares_about": [
+   "kajian",
+   "halal",
+   "akhlak",
+   "keluarga"
+  ],
+  "language_style": "santun, istilah Islami",
+  "tendencies": "menilai dari sisi halal dan pantas; tidak suka konten pamer dan berlebihan",
+  "presence": {
+   "X/Twitter": 0.2,
+   "Instagram": 0.8,
+   "TikTok": 0.7,
+   "Facebook": 0.4,
+   "Threads": 0.1,
+   "YouTube": 0.85
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_fashion",
+  "weight": 0.04,
+  "label": "Kezia, fashion & thrift lover",
+  "age": 22,
+  "gender": "perempuan",
+  "region": "Jakarta Utara",
+  "ses": "B (menengah)",
+  "occupation": "mahasiswi",
+  "platforms": [
+   "Instagram",
+   "TikTok"
+  ],
+  "archetype": "fashion",
+  "activity": "OOTD, thrifting, belanja brand lokal",
+  "cares_about": [
+   "OOTD",
+   "brand lokal",
+   "thrift",
+   "diskon"
+  ],
+  "language_style": "Jaksel, ekspresif",
+  "tendencies": "suka brand lokal yang autentik; menghukum brand yang plagiat",
+  "presence": {
+   "X/Twitter": 0.4,
+   "Instagram": 0.95,
+   "TikTok": 0.9,
+   "Facebook": 0.05,
+   "Threads": 0.4,
+   "YouTube": 0.5
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "s_pet",
+  "weight": 0.03,
+  "label": "Laras, pecinta kucing",
+  "age": 27,
+  "gender": "perempuan",
+  "region": "Malang",
+  "ses": "B (menengah)",
+  "occupation": "guru les",
+  "platforms": [
+   "Instagram",
+   "TikTok",
+   "X/Twitter"
+  ],
+  "archetype": "pet lover",
+  "activity": "posting kucing, ikut donasi rescue",
+  "cares_about": [
+   "kucing",
+   "rescue",
+   "pet food"
+  ],
+  "language_style": "gemas, emoji",
+  "tendencies": "sangat marah pada kekerasan hewan; suka konten lucu",
+  "presence": {
+   "X/Twitter": 0.5,
+   "Instagram": 0.85,
+   "TikTok": 0.8,
+   "Facebook": 0.2,
+   "Threads": 0.3,
+   "YouTube": 0.6
+  },
+  "post_volume": 1.0
+ }
+]

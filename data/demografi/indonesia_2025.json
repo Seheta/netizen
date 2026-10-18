@@ -1,0 +1,450 @@
+{
+  "_note": "Build data/demografi/indonesia_2025.json from BPS / APJII figures and print the netizen composition.",
+  "province": {
+    "year": 2025,
+    "total_population_k": 284438.6,
+    "rows": {
+      "Aceh": {
+        "population_k": 5626.0,
+        "internet_pct": {
+          "urban": 70.8,
+          "rural": 58.66,
+          "total": 62.93
+        }
+      },
+      "Sumatera Utara": {
+        "population_k": 15785.8,
+        "internet_pct": {
+          "urban": 77.43,
+          "rural": 69.69,
+          "total": 74.15
+        }
+      },
+      "Sumatera Barat": {
+        "population_k": 5914.3,
+        "internet_pct": {
+          "urban": 79.16,
+          "rural": 69.78,
+          "total": 74.59
+        }
+      },
+      "Riau": {
+        "population_k": 6811.2,
+        "internet_pct": {
+          "urban": 84.3,
+          "rural": 73.2,
+          "total": 77.68
+        }
+      },
+      "Jambi": {
+        "population_k": 3768.5,
+        "internet_pct": {
+          "urban": 78.17,
+          "rural": 68.55,
+          "total": 71.76
+        }
+      },
+      "Sumatera Selatan": {
+        "population_k": 8928.5,
+        "internet_pct": {
+          "urban": 80.34,
+          "rural": 64.5,
+          "total": 70.54
+        }
+      },
+      "Bengkulu": {
+        "population_k": 2138.0,
+        "internet_pct": {
+          "urban": 81.96,
+          "rural": 65.01,
+          "total": 70.72
+        }
+      },
+      "Lampung": {
+        "population_k": 9522.9,
+        "internet_pct": {
+          "urban": 77.24,
+          "rural": 71.37,
+          "total": 73.37
+        }
+      },
+      "Kep. Bangka Belitung": {
+        "population_k": 1550.8,
+        "internet_pct": {
+          "urban": 80.08,
+          "rural": 70.41,
+          "total": 76.06
+        }
+      },
+      "Kep. Riau": {
+        "population_k": 2213.5,
+        "internet_pct": {
+          "urban": 91.52,
+          "rural": 69.66,
+          "total": 89.26
+        }
+      },
+      "DKI Jakarta": {
+        "population_k": 10678.0,
+        "internet_pct": {
+          "urban": 87.84,
+          "rural": null,
+          "total": 87.84
+        }
+      },
+      "Jawa Barat": {
+        "population_k": 50759.0,
+        "internet_pct": {
+          "urban": 79.42,
+          "rural": 65.35,
+          "total": 76.62
+        }
+      },
+      "Jawa Tengah": {
+        "population_k": 38233.9,
+        "internet_pct": {
+          "urban": 76.08,
+          "rural": 69.78,
+          "total": 73.15
+        }
+      },
+      "DI Yogyakarta": {
+        "population_k": 3781.5,
+        "internet_pct": {
+          "urban": 83.98,
+          "rural": 68.24,
+          "total": 80.1
+        }
+      },
+      "Jawa Timur": {
+        "population_k": 42089.3,
+        "internet_pct": {
+          "urban": 75.22,
+          "rural": 61.69,
+          "total": 69.36
+        }
+      },
+      "Banten": {
+        "population_k": 12537.4,
+        "internet_pct": {
+          "urban": 79.82,
+          "rural": 56.77,
+          "total": 75.17
+        }
+      },
+      "Bali": {
+        "population_k": 4461.3,
+        "internet_pct": {
+          "urban": 81.73,
+          "rural": 66.39,
+          "total": 77.56
+        }
+      },
+      "Nusa Tenggara Barat": {
+        "population_k": 5731.1,
+        "internet_pct": {
+          "urban": 72.88,
+          "rural": 63.76,
+          "total": 68.52
+        }
+      },
+      "Nusa Tenggara Timur": {
+        "population_k": 5742.6,
+        "internet_pct": {
+          "urban": 76.88,
+          "rural": 46.73,
+          "total": 54.84
+        }
+      },
+      "Kalimantan Barat": {
+        "population_k": 5766.0,
+        "internet_pct": {
+          "urban": 83.78,
+          "rural": 64.02,
+          "total": 71.57
+        }
+      },
+      "Kalimantan Tengah": {
+        "population_k": 2845.0,
+        "internet_pct": {
+          "urban": 84.29,
+          "rural": 68.19,
+          "total": 75.23
+        }
+      },
+      "Kalimantan Selatan": {
+        "population_k": 4323.3,
+        "internet_pct": {
+          "urban": 80.63,
+          "rural": 68.96,
+          "total": 74.82
+        }
+      },
+      "Kalimantan Timur": {
+        "population_k": 4267.6,
+        "internet_pct": {
+          "urban": 87.33,
+          "rural": 77.91,
+          "total": 84.44
+        }
+      },
+      "Kalimantan Utara": {
+        "population_k": 749.4,
+        "internet_pct": {
+          "urban": 81.92,
+          "rural": 69.24,
+          "total": 77.44
+        }
+      },
+      "Sulawesi Utara": {
+        "population_k": 2721.4,
+        "internet_pct": {
+          "urban": 75.08,
+          "rural": 60.13,
+          "total": 68.44
+        }
+      },
+      "Sulawesi Tengah": {
+        "population_k": 3156.1,
+        "internet_pct": {
+          "urban": 75.99,
+          "rural": 55.7,
+          "total": 62.44
+        }
+      },
+      "Sulawesi Selatan": {
+        "population_k": 9563.1,
+        "internet_pct": {
+          "urban": 78.63,
+          "rural": 62.43,
+          "total": 70.1
+        }
+      },
+      "Sulawesi Tenggara": {
+        "population_k": 2836.7,
+        "internet_pct": {
+          "urban": 78.79,
+          "rural": 64.96,
+          "total": 70.36
+        }
+      },
+      "Gorontalo": {
+        "population_k": 1242.2,
+        "internet_pct": {
+          "urban": 74.03,
+          "rural": 59.04,
+          "total": 65.92
+        }
+      },
+      "Sulawesi Barat": {
+        "population_k": 1525.3,
+        "internet_pct": {
+          "urban": 77.28,
+          "rural": 63.9,
+          "total": 66.61
+        }
+      },
+      "Maluku": {
+        "population_k": 1970.6,
+        "internet_pct": {
+          "urban": 74.74,
+          "rural": 48.44,
+          "total": 59.96
+        }
+      },
+      "Maluku Utara": {
+        "population_k": 1373.8,
+        "internet_pct": {
+          "urban": 80.1,
+          "rural": 50.46,
+          "total": 59.17
+        }
+      },
+      "Papua Barat": {
+        "population_k": 587.6,
+        "internet_pct": {
+          "urban": 79.14,
+          "rural": 55.75,
+          "total": 62.96
+        }
+      },
+      "Papua Barat Daya": {
+        "population_k": 636.4,
+        "internet_pct": {
+          "urban": 77.98,
+          "rural": 53.4,
+          "total": 65.75
+        }
+      },
+      "Papua": {
+        "population_k": 1073.6,
+        "internet_pct": {
+          "urban": 77.56,
+          "rural": 39.32,
+          "total": 62.24
+        }
+      },
+      "Papua Selatan": {
+        "population_k": 549.7,
+        "internet_pct": {
+          "urban": 74.09,
+          "rural": 33.58,
+          "total": 48.44
+        }
+      },
+      "Papua Tengah": {
+        "population_k": 1492.3,
+        "internet_pct": {
+          "urban": 82.62,
+          "rural": 12.3,
+          "total": 28.71
+        }
+      },
+      "Papua Pegunungan": {
+        "population_k": 1484.9,
+        "internet_pct": {
+          "urban": 41.86,
+          "rural": 4.15,
+          "total": 6.76
+        }
+      }
+    },
+    "source": "BPS Penduduk menurut Provinsi 2025; internet: BPS Susenas 2024, % penduduk 5+ mengakses internet 3 bulan terakhir menurut provinsi & klasifikasi daerah"
+  },
+  "generation": {
+    "year": 2025,
+    "source": "BPS SUPAS 2025 (rilis 5 Mei 2026), via indonesiabaik.id & databoks (secondary)",
+    "population_pct": {
+      "post_gen_z": 19.65,
+      "gen_z": 24.93,
+      "millennial": 24.34,
+      "gen_x": 19.7,
+      "boomer": 10.31,
+      "pre_boomer": 1.07
+    },
+    "internet_penetration_pct": {
+      "source": "APJII Survei Penetrasi Internet 2025 (WNI 13+, n=8.700, 10 Apr-16 Jul 2025), via Kontan (secondary)",
+      "post_gen_z": 79.73,
+      "gen_z": 87.8,
+      "millennial": 89.12,
+      "gen_x": 79.48,
+      "boomer": 59.4,
+      "pre_boomer": 20.88
+    }
+  },
+  "gender": {
+    "source": "APJII 2025 via Kontan (secondary); sex ratio from BPS 2025",
+    "internet_penetration_pct": {
+      "male": 82.73,
+      "female": 78.57
+    },
+    "sex_ratio_2025": 101.9
+  },
+  "urban_rural_internet_users_pct": {
+    "source": "APJII 2024 survey (share of users), via apjii.or.id",
+    "urban": 69.5,
+    "rural": 30.5
+  },
+  "economic_class": {
+    "year": 2024,
+    "source": "BPS kelas ekonomi 2024 (Susenas Maret 2024), via BPK & datasatu (secondary); kelas_atas = remainder",
+    "definition": "per-capita spending as multiples of the poverty line (GK): rentan 1-1.5x, menuju menengah 1.5-3.5x, menengah 3.5-17x, atas >17x",
+    "population_pct": {
+      "miskin": 9.03,
+      "rentan_miskin": 24.23,
+      "menuju_kelas_menengah": 49.22,
+      "kelas_menengah": 17.13,
+      "kelas_atas": 0.39
+    }
+  },
+  "education_15plus": {
+    "source": "BPS Susenas, via Kompas data & databoks (secondary, years 2025-2026 mixed; verify)",
+    "pct": {
+      "tidak_punya_ijazah": 11.35,
+      "sd": 23.9,
+      "smp": 22.48,
+      "sma_smk": 31.25,
+      "perguruan_tinggi": 11.0
+    }
+  },
+  "employment": {
+    "year": "Agustus 2025",
+    "source": "BPS BRS Keadaan Ketenagakerjaan, via Kemnaker Snapshot Statistik Ketenagakerjaan",
+    "status_pct_of_workers": {
+      "buruh_karyawan_pegawai": 38.74,
+      "berusaha_sendiri": 21.4,
+      "berusaha_dibantu_buruh_tidak_tetap": 13.86,
+      "pekerja_bebas_nonpertanian": 5.16,
+      "pekerja_bebas_pertanian": 4.42,
+      "berusaha_dibantu_buruh_tetap": 3.46,
+      "pekerja_keluarga_dan_lainnya": 12.96
+    },
+    "sector_pct_of_workers": {
+      "pertanian": 28.15,
+      "perdagangan": 18.73,
+      "industri_pengolahan": 13.86,
+      "akomodasi_makan_minum": 7.98,
+      "konstruksi": 6.51,
+      "jasa_pendidikan": 5.06,
+      "jasa_lainnya": 4.46,
+      "transportasi_pergudangan": 4.28,
+      "administrasi_pemerintahan": 3.5,
+      "jasa_perusahaan": 1.76,
+      "jasa_kesehatan": 1.68,
+      "lainnya": 4.06
+    }
+  },
+  "religion": {
+    "year": "Juni 2025",
+    "source": "Dukcapil Kemendagri, via news (secondary); islam = remainder",
+    "pct": {
+      "islam": 87.1,
+      "kristen": 7.37,
+      "katolik": 3.07,
+      "hindu": 1.66,
+      "buddha": 0.7,
+      "lainnya": 0.1
+    }
+  },
+  "platform_most_used": {
+    "source": "APJII 2025 via selular.id (secondary). Share naming each platform as the one they use MOST, not penetration: someone can use X daily without naming it.",
+    "all": {
+      "tiktok": 35.17,
+      "youtube": 23.76,
+      "facebook": 21.58,
+      "instagram": 15.94,
+      "x_twitter": 0.56
+    },
+    "gen_z": {
+      "tiktok": 42.27,
+      "instagram": 25.33,
+      "youtube": 17.33,
+      "facebook": 13.22
+    },
+    "millennial": {
+      "tiktok": 33.4,
+      "facebook": 27.03,
+      "youtube": 23.86
+    },
+    "gen_x": {
+      "youtube": 31.69,
+      "tiktok": 28.58,
+      "facebook": 27.19,
+      "instagram": 7.15
+    },
+    "boomer": {
+      "youtube": 39.11,
+      "facebook": 22.0,
+      "tiktok": 21.78,
+      "instagram": 4.44
+    }
+  },
+  "social_media_hours_per_day_pct": {
+    "source": "APJII 2025 via GoodStats",
+    "<1": 9.03,
+    "1-2": 34.17,
+    "2-3": 33.03,
+    "3-4": 14.99,
+    ">4": 8.78
+  }
+}

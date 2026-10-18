@@ -1,0 +1,69 @@
+[
+  {
+    "id": "c1_ppn12",
+    "kind": "real",
+    "platform": "X/Twitter",
+    "post": "BREAKING: Pemerintah resmi naikkan PPN jadi 12% mulai 1 Januari 2025. Menkeu: kenaikan diperlukan untuk menjaga kesehatan APBN.",
+    "expected": "Backlash besar dan sangat negatif. Trending, petisi tolak PPN 12% ramai, banyak utas penjelasan dampak ke harga. Pembela utama: akun pro-pemerintah."
+  },
+  {
+    "id": "c1_ppn12_threads",
+    "kind": "real_validation",
+    "platform": "Threads",
+    "post": "Pemerintah resmi naikkan PPN jadi 12% mulai 1 Januari 2025. Menkeu: kenaikan diperlukan untuk menjaga kesehatan APBN.",
+    "subject": "kenaikan PPN menjadi 12%",
+    "expected": "Validasi di luar data fitting: dibandingkan dengan 86 postingan Threads asli (Nov 2024 - Jan 2025)."
+  },
+  {
+    "id": "c2_tapera",
+    "kind": "real",
+    "platform": "X/Twitter",
+    "post": "Gaji karyawan swasta bakal dipotong 3% untuk Tapera (Tabungan Perumahan Rakyat). Potongan 2,5% ditanggung pekerja, 0,5% pemberi kerja.",
+    "expected": "Penolakan luas dari pekerja dan buruh, sentimen sangat negatif, banyak meme 'gaji numpang lewat'. Isu ramai berhari-hari."
+  },
+  {
+    "id": "c3_timnas",
+    "kind": "real",
+    "platform": "Instagram",
+    "post": "FULL TIME! Indonesia 2-0 Arab Saudi. Timnas Garuda raih kemenangan pertama di babak ketiga kualifikasi Piala Dunia 2026! 🇮🇩🔥",
+    "expected": "Euforia sangat positif lintas segmen, banjir komentar bangga, banyak share. Hampir tidak ada sentimen negatif."
+  },
+  {
+    "id": "c4_skincare",
+    "kind": "fictional_control",
+    "platform": "Instagram",
+    "post": "Kenalin Glowra Serum Niacinamide 10%, skincare lokal BPOM & halal, cuma Rp49.000! Promo launching beli 2 gratis 1 sampai akhir bulan ✨",
+    "expected": "Kontrol: reaksi datar sampai positif ringan. Tertarik terutama urban perempuan dan gen Z; segmen lain cuek. Tidak ada kontroversi."
+  },
+  {
+    "id": "c5_ojol_ad",
+    "kind": "fictional_tone_deaf",
+    "platform": "TikTok",
+    "post": "Iklan minuman energi 'BoostMax': driver ojol digambarkan ketiduran di motor sambil nunggu orderan, tagline 'Jangan lemes kayak abang ojol, minum BoostMax biar gak kalah saing!' 😂",
+    "expected": "Hipotesis: backlash dari komunitas ojol dan pekerja, dianggap merendahkan profesi; brand diroasting di X; sebagian gen Z menganggap lucu."
+  },
+  {
+    "id": "c6_coldplay_slang",
+    "kind": "real_slang",
+    "platform": "X/Twitter",
+    "post": "anjirr tiket coldplay jkt abis dlm hitungan menit, war tiket udh kek perang dunia 3 😭 trs calo udh jual 3x lipat bjir. promotornya kerja apa sih?? 🙃",
+    "subject": "promotor konser dan praktik calo tiket",
+    "expected": "Kasus nyata (Coldplay Jakarta, 2023): frustrasi luas terhadap promotor dan calo, sangat ramai di X; sentimen terhadap promotor/calo sangat negatif."
+  },
+  {
+    "id": "c7_kopi_slang",
+    "kind": "fictional_slang_positive",
+    "platform": "TikTok",
+    "post": "POV: lo nemu kopsus 5rb rasa 25rb 😭🔥 gacor parah sumpahh, auto langganan tiap pagi sblm ngampus. spill tempatnya di komen yaa #kopisusumurah",
+    "subject": "warung kopi susu murah tersebut",
+    "expected": "Kontrol positif berbahasa gaul: positif di gen Z, mahasiswa, dan urban; segmen lain cuek. Tidak ada kontroversi."
+  },
+  {
+    "id": "c8_flexing_sarcasm",
+    "kind": "real_pattern_sarcasm",
+    "platform": "X/Twitter",
+    "post": "rakyat disuruh hemat, eh anak pejabat pajak flexing rubicon sama jam 1M di IG 🤡 mantap bet negeri konoha wkwk",
+    "subject": "pejabat dan keluarganya yang pamer kemewahan",
+    "expected": "Pola nyata (kasus flexing pejabat pajak, 2023): kemarahan luas lintas segmen terhadap pejabat yang flexing; sarkasme harus dibaca sebagai kritik, bukan dukungan."
+  }
+]
