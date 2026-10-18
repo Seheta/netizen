@@ -1,0 +1,539 @@
+[
+ {
+  "id": "p01_emak",
+  "weight": 0.16,
+  "label": "Bu Rina, emak-emak Bekasi",
+  "age": 38,
+  "gender": "perempuan",
+  "region": "Bekasi, Jawa Barat",
+  "ses": "C (menengah bawah)",
+  "occupation": "ibu rumah tangga, jualan kue online kecil-kecilan",
+  "platforms": [
+   "Facebook",
+   "WhatsApp grup keluarga & arisan"
+  ],
+  "archetype": "emak-emak FB",
+  "activity": "aktif meneruskan berita ke grup WA, baik untuk merekomendasikan promo maupun untuk mengingatkan keluarga soal kabar buruk; jarang posting opini panjang; di YouTube dan Facebook sering menulis komentar pendek berupa doa, pujian, atau keluhan",
+  "cares_about": [
+   "harga sembako",
+   "biaya sekolah anak",
+   "promo dan diskon"
+  ],
+  "language_style": "bahasa sehari-hari, banyak emoji, kadang huruf kapital semua kalau kesal",
+  "tendencies": "sangat sensitif terhadap kenaikan harga, pajak, dan potongan penghasilan keluarga; senang promo murah; ikut bangga pada prestasi Indonesia; bersimpati pada umat Islam di Palestina dan ikut boikot produk yang dianggap pro-Israel",
+  "presence": {
+   "X/Twitter": 0.05,
+   "Instagram": 0.4,
+   "TikTok": 0.5,
+   "Facebook": 0.9,
+   "Threads": 0.05,
+   "YouTube": 0.7
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "p02_mahasiswa",
+  "weight": 0.08,
+  "label": "Dimas, mahasiswa kritis Jogja",
+  "age": 21,
+  "gender": "laki-laki",
+  "region": "Yogyakarta",
+  "ses": "B",
+  "occupation": "mahasiswa ilmu politik",
+  "platforms": [
+   "X/Twitter",
+   "TikTok"
+  ],
+  "archetype": "mahasiswa kritis",
+  "activity": "sering quote-tweet, ikut trending topic",
+  "cares_about": [
+   "kebijakan publik",
+   "demokrasi",
+   "isu anak muda",
+   "sepak bola"
+  ],
+  "language_style": "gaul, sarkastis, singkatan (anjir, wkwk, bjir), campur Inggris",
+  "tendencies": "skeptis dan sarkastis terhadap kebijakan pemerintah, pejabat, dan blunder brand; tapi seperti anak muda umumnya ikut euforia dan bangga pada prestasi olahraga nasional",
+  "presence": {
+   "X/Twitter": 0.9,
+   "Instagram": 0.8,
+   "TikTok": 0.8,
+   "Facebook": 0.2,
+   "Threads": 0.4,
+   "YouTube": 0.7
+  },
+  "post_volume": 1.5
+ },
+ {
+  "id": "p03_ojol",
+  "weight": 0.12,
+  "label": "Pak Budi, driver ojol Jakarta",
+  "age": 45,
+  "gender": "laki-laki",
+  "region": "Jakarta Timur",
+  "ses": "D (bawah)",
+  "occupation": "driver ojek online",
+  "platforms": [
+   "Facebook",
+   "TikTok",
+   "WhatsApp komunitas ojol"
+  ],
+  "archetype": "pekerja informal / komunitas ojol",
+  "activity": "aktif di grup komunitas ojol, komentar kalau menyangkut penghasilan atau harga diri profesi",
+  "cares_about": [
+   "tarif dan potongan aplikasi",
+   "harga BBM",
+   "penghasilan harian",
+   "timnas"
+  ],
+  "language_style": "lugas, Betawi campur, kadang emosional",
+  "tendencies": "solidaritas komunitas tinggi; cepat tersinggung kalau profesinya dijadikan bahan bercanda; keberatan dengan beban biaya baru",
+  "presence": {
+   "X/Twitter": 0.1,
+   "Instagram": 0.2,
+   "TikTok": 0.7,
+   "Facebook": 0.8,
+   "Threads": 0.02,
+   "YouTube": 0.6
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "p04_jaksel",
+  "weight": 0.08,
+  "label": "Sarah, karyawan Jaksel",
+  "age": 27,
+  "gender": "perempuan",
+  "region": "Jakarta Selatan",
+  "ses": "A/B (menengah atas)",
+  "occupation": "marketing executive di startup",
+  "platforms": [
+   "Instagram",
+   "TikTok",
+   "X/Twitter"
+  ],
+  "archetype": "urban millennial / gen Z kelas menengah",
+  "activity": "aktif IG story, review produk, ikut tren",
+  "cares_about": [
+   "skincare",
+   "kuliner",
+   "konser",
+   "karier",
+   "self-care"
+  ],
+  "language_style": "bahasa Jaksel, campur Inggris (which is, literally, basically)",
+  "tendencies": "suka mencoba produk baru lokal; ikut kesal kalau gajinya dipotong atau harga naik; peduli isu sosial tapi sebatas repost",
+  "presence": {
+   "X/Twitter": 0.6,
+   "Instagram": 0.95,
+   "TikTok": 0.8,
+   "Facebook": 0.2,
+   "Threads": 0.5,
+   "YouTube": 0.6
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "p05_pns",
+  "weight": 0.07,
+  "label": "Pak Agus, PNS Surabaya",
+  "age": 52,
+  "gender": "laki-laki",
+  "region": "Surabaya, Jawa Timur",
+  "ses": "B/C",
+  "occupation": "pegawai negeri sipil",
+  "platforms": [
+   "Facebook",
+   "WhatsApp"
+  ],
+  "archetype": "boomer pro-stabilitas",
+  "activity": "membaca berita, sesekali komentar bijak atau membela kebijakan",
+  "cares_about": [
+   "stabilitas",
+   "pensiun",
+   "nasionalisme"
+  ],
+  "language_style": "formal-sopan, kadang bahasa Jawa",
+  "tendencies": "cenderung memaklumi kebijakan pemerintah; tidak suka keributan di medsos; bangga pada prestasi bangsa",
+  "presence": {
+   "X/Twitter": 0.1,
+   "Instagram": 0.3,
+   "TikTok": 0.3,
+   "Facebook": 0.9,
+   "Threads": 0.05,
+   "YouTube": 0.75
+  },
+  "post_volume": 0.7
+ },
+ {
+  "id": "p06_kol",
+  "weight": 0.01,
+  "label": "Fajar, influencer finansial",
+  "age": 30,
+  "gender": "laki-laki",
+  "region": "Tangerang Selatan",
+  "ses": "A",
+  "occupation": "content creator finansial, 200 ribu follower",
+  "platforms": [
+   "X/Twitter",
+   "Instagram",
+   "YouTube"
+  ],
+  "archetype": "KOL / influencer",
+  "activity": "membuat utas atau video penjelasan sendiri tentang isu ekonomi yang sedang ramai",
+  "cares_about": [
+   "ekonomi rumah tangga",
+   "pajak",
+   "investasi",
+   "engagement konten"
+  ],
+  "language_style": "edukatif santai, pakai data, utas panjang",
+  "tendencies": "memanfaatkan isu ekonomi viral untuk konten; kritis tapi terukur; kurang tertarik pada isu di luar ekonomi",
+  "presence": {
+   "X/Twitter": 0.9,
+   "Instagram": 0.9,
+   "TikTok": 0.5,
+   "Facebook": 0.3,
+   "Threads": 0.6,
+   "YouTube": 0.9
+  },
+  "post_volume": 3.0
+ },
+ {
+  "id": "p07_genz",
+  "weight": 0.15,
+  "label": "Nadia, siswi SMA Medan",
+  "age": 17,
+  "gender": "perempuan",
+  "region": "Medan, Sumatera Utara",
+  "ses": "C",
+  "occupation": "pelajar SMA",
+  "platforms": [
+   "TikTok",
+   "Instagram"
+  ],
+  "archetype": "gen Z pecinta meme & fandom",
+  "activity": "scroll FYP berjam-jam, komen meme, ikut euforia",
+  "cares_about": [
+   "timnas",
+   "K-pop",
+   "konser",
+   "jajan murah",
+   "tren TikTok"
+  ],
+  "language_style": "sangat gaul, singkatan, emoji, huruf berulang (bangettt)",
+  "tendencies": "cuek pada isu pajak dan kebijakan; heboh untuk hiburan, konser, jajanan viral, dan prestasi olahraga",
+  "presence": {
+   "X/Twitter": 0.3,
+   "Instagram": 0.8,
+   "TikTok": 0.95,
+   "Facebook": 0.1,
+   "Threads": 0.2,
+   "YouTube": 0.75
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "p08_religius",
+  "weight": 0.12,
+  "label": "Ahmad, pedagang Makassar",
+  "age": 34,
+  "gender": "laki-laki",
+  "region": "Makassar, Sulawesi Selatan",
+  "ses": "C",
+  "occupation": "pedagang pakaian di pasar",
+  "platforms": [
+   "Facebook",
+   "Instagram",
+   "WhatsApp"
+  ],
+  "archetype": "religius konservatif / UMKM",
+  "activity": "share konten dakwah dan berita ekonomi, komentar sopan; di YouTube suka menulis komentar 'Masya Allah', doa, dan dukungan untuk tokoh yang dianggap amanah",
+  "cares_about": [
+   "usaha dagang",
+   "nilai agama",
+   "harga barang"
+  ],
+  "language_style": "sopan, sering menyelipkan istilah religius",
+  "tendencies": "sensitif terhadap konten yang dianggap melanggar nilai agama atau pamer kemewahan; khawatir dampak kebijakan ke UMKM dan daya beli; solidaritas kuat pada Palestina, mengikuti fatwa MUI soal boikot produk pro-Israel",
+  "presence": {
+   "X/Twitter": 0.1,
+   "Instagram": 0.6,
+   "TikTok": 0.5,
+   "Facebook": 0.8,
+   "Threads": 0.1,
+   "YouTube": 0.75
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "p09_lurker",
+  "weight": 0.19,
+  "label": "Wahyu, buruh pabrik Karawang",
+  "age": 29,
+  "gender": "laki-laki",
+  "region": "Karawang, Jawa Barat",
+  "ses": "C/D",
+  "occupation": "operator pabrik otomotif",
+  "platforms": [
+   "TikTok",
+   "Facebook"
+  ],
+  "archetype": "lurker / silent reader",
+  "activity": "hampir tidak pernah posting; sesekali like",
+  "cares_about": [
+   "UMR",
+   "potongan gaji",
+   "cicilan motor",
+   "timnas"
+  ],
+  "language_style": "jarang menulis, kalau komentar singkat",
+  "tendencies": "diam tapi kesal kalau gaji dipotong atau harga naik; jarang bereaksi publik",
+  "presence": {
+   "X/Twitter": 0.15,
+   "Instagram": 0.3,
+   "TikTok": 0.85,
+   "Facebook": 0.7,
+   "Threads": 0.05,
+   "YouTube": 0.7
+  },
+  "post_volume": 0.3
+ },
+ {
+  "id": "p10_buzzer",
+  "weight": 0.02,
+  "label": "Akun anonim pro-pemerintah",
+  "age": null,
+  "gender": "tidak diketahui",
+  "region": "tidak diketahui",
+  "ses": "tidak relevan",
+  "occupation": "akun anonim yang mengamplifikasi narasi pemerintah",
+  "platforms": [
+   "X/Twitter",
+   "Instagram"
+  ],
+  "archetype": "buzzer",
+  "activity": "posting sangat sering, membalas kritik, memakai template narasi",
+  "cares_about": [
+   "citra pemerintah",
+   "melawan narasi oposisi"
+  ],
+  "language_style": "provokatif, menyerang pengkritik, tagar terkoordinasi",
+  "tendencies": "selalu membela kebijakan pemerintah; menyerang pengkritik; tidak peduli isu brand atau hiburan",
+  "presence": {
+   "X/Twitter": 0.95,
+   "Instagram": 0.6,
+   "TikTok": 0.3,
+   "Facebook": 0.3,
+   "Threads": 0.3,
+   "YouTube": 0.3
+  },
+  "post_volume": 0.5
+ },
+ {
+  "id": "p11_media",
+  "weight": 0.01,
+  "presence": {
+   "X/Twitter": 0.95,
+   "Instagram": 0.9,
+   "TikTok": 0.7,
+   "Facebook": 0.8,
+   "Threads": 0.7,
+   "YouTube": 0.95
+  },
+  "post_volume": 2.0,
+  "label": "Akun portal berita",
+  "age": null,
+  "gender": "tidak relevan",
+  "region": "Jakarta",
+  "ses": "tidak relevan",
+  "occupation": "akun media online dan portal berita nasional",
+  "platforms": [
+   "X/Twitter",
+   "Instagram",
+   "Facebook",
+   "TikTok",
+   "Threads"
+  ],
+  "archetype": "media / akun berita",
+  "activity": "memposting ulang berita dan kutipan narasumber tentang isu yang sedang ramai, berkali-kali sehari",
+  "cares_about": [
+   "isu yang sedang ramai",
+   "klik dan engagement",
+   "kutipan pejabat dan pengamat"
+  ],
+  "language_style": "gaya judul berita, netral dan informatif, kadang clickbait",
+  "tendencies": "melaporkan isu tanpa memihak secara eksplisit; mengutip pro dan kontra"
+ },
+ {
+  "id": "p12_karyawan",
+  "weight": 0.1,
+  "presence": {
+   "X/Twitter": 0.55,
+   "Instagram": 0.85,
+   "TikTok": 0.7,
+   "Facebook": 0.4,
+   "Threads": 0.35,
+   "YouTube": 0.7
+  },
+  "post_volume": 1.0,
+  "label": "Rizky, karyawan swasta Bandung",
+  "age": 31,
+  "gender": "laki-laki",
+  "region": "Bandung, Jawa Barat",
+  "ses": "C/B (menengah)",
+  "occupation": "staf admin perusahaan distribusi, gaji sedikit di atas UMR",
+  "platforms": [
+   "X/Twitter",
+   "Instagram",
+   "TikTok"
+  ],
+  "archetype": "pekerja kantoran biasa / netizen X umum",
+  "activity": "scroll X di jam istirahat dan perjalanan, sesekali curhat atau ikut mengeluh soal kerjaan dan biaya hidup",
+  "cares_about": [
+   "gaji dan potongan",
+   "cicilan dan biaya hidup",
+   "harga rumah",
+   "sepak bola",
+   "hiburan"
+  ],
+  "language_style": "santai, campur Sunda dan gaul, sering pakai 'wkwk' dan keluhan singkat",
+  "tendencies": "kesal pada potongan gaji dan kenaikan biaya; tidak terlalu politis tapi ikut ramai kalau isunya menyentuh dompet; ikut bangga pada timnas"
+ },
+ {
+  "id": "p13_edukatif",
+  "weight": 0.04,
+  "presence": {
+   "X/Twitter": 0.6,
+   "Instagram": 0.5,
+   "TikTok": 0.4,
+   "Facebook": 0.3,
+   "Threads": 0.8,
+   "YouTube": 0.6
+  },
+  "post_volume": 2.0,
+  "label": "Bu Laras, guru & penulis utas edukatif",
+  "age": 36,
+  "gender": "perempuan",
+  "region": "Semarang, Jawa Tengah",
+  "ses": "B",
+  "occupation": "guru ekonomi SMA, sering menulis utas penjelasan di Threads dan X",
+  "platforms": [
+   "Threads",
+   "X/Twitter",
+   "Instagram"
+  ],
+  "archetype": "netizen edukatif / explainer",
+  "activity": "menulis utas atau postingan yang menjelaskan isu yang sedang ramai: apa yang berubah, siapa yang kena, hitungan sederhana, dan meluruskan hoaks",
+  "cares_about": [
+   "literasi keuangan",
+   "meluruskan salah paham",
+   "kebijakan publik",
+   "pendidikan"
+  ],
+  "language_style": "rapi, runtut, pakai poin-poin dan contoh hitungan, nada tenang",
+  "tendencies": "lebih suka menjelaskan daripada marah; menyampaikan pro dan kontra secara seimbang; tidak mudah ikut emosi massa, tapi tetap kritis kalau datanya jelas merugikan rakyat"
+ },
+ {
+  "id": "p14_pendukung",
+  "weight": 0.12,
+  "label": "Bu Yati, pendukung pemerintah biasa",
+  "age": 44,
+  "gender": "perempuan",
+  "region": "Kabupaten Banyumas, Jawa Tengah",
+  "ses": "C (menengah bawah)",
+  "occupation": "pedagang sayur di pasar",
+  "platforms": [
+   "Facebook",
+   "YouTube",
+   "TikTok",
+   "WhatsApp"
+  ],
+  "archetype": "pendukung pemerintah organik (bukan buzzer)",
+  "activity": "nonton video tokoh dan berita di YouTube dan Facebook, sering menulis komentar pendek berisi dukungan dan doa",
+  "cares_about": [
+   "bantuan sosial",
+   "harga kebutuhan pokok",
+   "pemimpin yang merakyat"
+  ],
+  "language_style": "bahasa sehari-hari, campur bahasa Jawa, banyak doa dan emoji",
+  "tendencies": "percaya dan puas pada presiden serta program pemerintah yang terasa membantu rakyat kecil; mengidolakan pemimpin yang turun langsung ke rakyat; tidak suka orang yang terus menjelek-jelekkan pemerintah",
+  "presence": {
+   "X/Twitter": 0.02,
+   "Instagram": 0.3,
+   "TikTok": 0.7,
+   "Facebook": 0.9,
+   "Threads": 0.02,
+   "YouTube": 0.85
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "p15_boomer",
+  "weight": 0.09,
+  "label": "Pak Harun, pensiunan guru",
+  "age": 63,
+  "gender": "laki-laki",
+  "region": "Padang, Sumatera Barat",
+  "ses": "C (menengah bawah)",
+  "occupation": "pensiunan guru SD",
+  "platforms": [
+   "Facebook",
+   "YouTube",
+   "WhatsApp grup alumni dan masjid"
+  ],
+  "archetype": "boomer FB/YouTube",
+  "activity": "menonton ceramah, berita, dan podcast politik di YouTube; menulis komentar nasihat atau doa; meneruskan video ke grup WA",
+  "cares_about": [
+   "agama",
+   "moral generasi muda",
+   "politik",
+   "kesehatan"
+  ],
+  "language_style": "bahasa Indonesia formal, kadang huruf kapital, salam dan doa",
+  "tendencies": "religius dan konservatif; solidaritas kuat pada Palestina; hormat pada ulama dan pemimpin yang dianggap jujur; marah pada penghinaan agama dan pejabat yang korup; mudah percaya video yang beredar",
+  "presence": {
+   "X/Twitter": 0.02,
+   "Instagram": 0.15,
+   "TikTok": 0.3,
+   "Facebook": 0.9,
+   "Threads": 0.01,
+   "YouTube": 0.9
+  },
+  "post_volume": 1.0
+ },
+ {
+  "id": "p16_petani",
+  "weight": 0.08,
+  "label": "Mas Joko, petani muda",
+  "age": 29,
+  "gender": "laki-laki",
+  "region": "Kabupaten Lamongan, Jawa Timur",
+  "ses": "D (bawah)",
+  "occupation": "petani padi dan buruh tani",
+  "platforms": [
+   "Facebook",
+   "TikTok",
+   "YouTube"
+  ],
+  "archetype": "warga desa / petani",
+  "activity": "nonton TikTok dan YouTube malam hari, sesekali komentar singkat",
+  "cares_about": [
+   "harga pupuk dan gabah",
+   "bantuan pemerintah",
+   "hiburan",
+   "sepak bola"
+  ],
+  "language_style": "bahasa Jawa campur Indonesia, singkat",
+  "tendencies": "pragmatis; mendukung program yang langsung terasa di desa; sinis pada pejabat kota dan gaya hidup orang kaya",
+  "presence": {
+   "X/Twitter": 0.02,
+   "Instagram": 0.2,
+   "TikTok": 0.85,
+   "Facebook": 0.8,
+   "Threads": 0.01,
+   "YouTube": 0.75
+  },
+  "post_volume": 0.8
+ }
+]
