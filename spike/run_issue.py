@@ -144,6 +144,62 @@ def scenario(post, personas, influencers, fit, r1, posted, r2s, exp: int, pickup
     return res
 
 
+PLATFORMS = ("Instagram", "TikTok", "Threads", "X/Twitter", "YouTube", "Facebook")
+
+
+async def run(client, text: str, subject: str = "", target: str = "", messenger: str = "",
+              platforms=PLATFORMS[:4], run_id: str = "issue") -> dict:
+    """The whole workflow for one post; the CLI report and the web server both read the returned dict."""
+    general = json.loads((ROOT / "personas.json").read_text(encoding="utf-8"))
+    fams = segment_families()
+    members = [m for fam in fams.values() for m in fam]
+    influencers = json.loads((ROOT / "influencers.json").read_text(encoding="utf-8"))
+    (ranked, t_ret), (fit, t_fit) = await asyncio.gather(
+        retrieve(client, text, library()), audience_fit(client, text, target, general + members, messenger))
+    best = {sid: max(fit[m["id"]] for m in fam) for sid, fam in fams.items()}
+    chosen_ids = sorted((sid for sid in fams if best[sid] >= SEGMENT_MIN_FIT), key=lambda sid: -best[sid])[:MAX_SEGMENTS]
+    personas = general + [m for sid in chosen_ids for m in fams[sid]]
+    posts = [{"id": f"{run_id}_{p.split('/')[0].lower()}", "platform": p, "post": text,
+              **({"subject": subject} if subject else {}),
+              **({"messenger": messenger} if messenger else {})} for p in platforms]
+    sims = await asyncio.gather(*(simulate(client, p, personas, influencers) for p in posts))
+    return {"text": text, "subject": subject, "target": target, "messenger": messenger, "general": general, "fams": fams,
+            "influencers": influencers, "ranked": ranked, "fit": fit, "best": best, "chosen_ids": chosen_ids,
+            "personas": personas, "posts": posts, "sims": sims, "tokens": t_ret + t_fit + sum(t for *_, t in sims)}
+
+
+def web_view(r: dict) -> dict:
+    """What the web page draws: per platform and reach scenario, each persona's stop chance, stance and share of readers."""
+    out = {"text": r["text"], "tokens": r["tokens"], "segments": r["chosen_ids"],
+           "anchors": [{"id": c["id"], "similarity": s, "mix": c["mix"], "n": c["n"]} for s, c in r["ranked"][:3]],
+           "platforms": {}}
+    for post, (r1, posted, r2s, _) in zip(r["posts"], r["sims"]):
+        a = r1["answers"]
+        pl = {"virality": a["post__virality"]["score"], "sensitive": a["post__sensitive"]["noul"],
+              "influencers": [{"id": i["id"], "label": i["label"], "take": tk, "p": pp} for i, tk, pp in posted], "scenarios": {}}
+        for name, (exp, pickup) in SCENARIOS.items():
+            res = scenario(post, r["personas"], r["influencers"], r["fit"], r1, posted, r2s, exp, pickup)
+            readers = sum(x["readers"] for x in res["rows"]) or 1
+            pl["scenarios"][name] = {
+                "vocal": res["vocal"], "reach": res["reach2"], "net": res["net2"], "pro": res["pro_r"], "contra": res["contra_r"],
+                "personas": [{"id": x["id"], "label": x["label"], "stop": x["stop1"], "net": x["net2"], "share": x["readers"] / readers}
+                             for x in res["rows"]]}
+        out["platforms"][post["platform"]] = pl
+    return out
+
+
+def save(r: dict, run_id: str) -> Path:
+    out = ROOT / "results" / f"issue_{run_id}_{datetime.now():%Y%m%d_%H%M%S}.json"
+    out.parent.mkdir(exist_ok=True)
+    out.write_text(json.dumps({"text": r["text"], "subject": r["subject"], "target": r["target"],
+                               "retrieval": [{"id": c["id"], "similarity": s} for s, c in r["ranked"]],
+                               "fit": r["fit"], "segments": r["chosen_ids"],
+                               "runs": [{"post": post, "round1": r1, "posted": [(i["id"], tk, pp) for i, tk, pp in posted],
+                                         "round2": list(r2s)} for post, (r1, posted, r2s, _) in zip(r["posts"], r["sims"])]},
+                              ensure_ascii=False, indent=2), encoding="utf-8")
+    return out
+
+
 async def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--text", required=True)
@@ -151,26 +207,13 @@ async def main() -> None:
     ap.add_argument("--target", default="", help="the brand's intended audience, in plain words")
     ap.add_argument("--messenger", default="", help="who posts it: the account, brand, or person, in plain words")
     ap.add_argument("--id", default="issue")
-    ap.add_argument("--platforms", default="Instagram,TikTok,Threads,X/Twitter")
+    ap.add_argument("--platforms", default=",".join(PLATFORMS[:4]))
     args = ap.parse_args()
     load_env()
-    general = json.loads((ROOT / "personas.json").read_text(encoding="utf-8"))
-    fams = segment_families()
-    members = [m for fam in fams.values() for m in fam]
-    influencers = json.loads((ROOT / "influencers.json").read_text(encoding="utf-8"))
-    platforms = [p.strip() for p in args.platforms.split(",")]
-
     async with AsyncTypeSafeClient() as client:
-        (ranked, t_ret), (fit, t_fit) = await asyncio.gather(
-            retrieve(client, args.text, library()), audience_fit(client, args.text, args.target, general + members, args.messenger))
-        best = {sid: max(fit[m["id"]] for m in fam) for sid, fam in fams.items()}
-        chosen_ids = sorted((sid for sid in fams if best[sid] >= SEGMENT_MIN_FIT), key=lambda sid: -best[sid])[:MAX_SEGMENTS]
-        chosen = [m for sid in chosen_ids for m in fams[sid]]
-        personas = general + chosen
-        posts = [{"id": f"{args.id}_{p.split('/')[0].lower()}", "platform": p, "post": args.text,
-                  **({"subject": args.subject} if args.subject else {}),
-                  **({"messenger": args.messenger} if args.messenger else {})} for p in platforms]
-        sims = await asyncio.gather(*(simulate(client, p, personas, influencers) for p in posts))
+        r = await run(client, args.text, args.subject, args.target, args.messenger,
+                      [p.strip() for p in args.platforms.split(",")], args.id)
+    ranked, fit, fams, general, chosen_ids = r["ranked"], r["fit"], r["fams"], r["general"], r["chosen_ids"]
 
     print("=== 1. Similar cases in the library (YouTube comments) ===")
     for score, c in ranked[:3]:
@@ -181,32 +224,23 @@ async def main() -> None:
     print("\n=== 2. Audience fit (0..1) ===")
     for sid in chosen_ids:
         print(f"  segment added  : {sid}  " + ", ".join(f"{m['label'].split(',')[0]} {fit[m['id']]:.2f}" for m in fams[sid]))
-    print("  segments left  : " + ", ".join(f"{sid[2:]} {best[sid]:.2f}" for sid in fams if sid not in chosen_ids))
+    print("  segments left  : " + ", ".join(f"{sid[2:]} {r['best'][sid]:.2f}" for sid in fams if sid not in chosen_ids))
     print("  general        : " + ", ".join(f"{p['label'].split(',')[0]} {fit[p['id']]:.2f}" for p in general))
 
     print("\n=== 3. Simulation by reach scenario ===")
-    tokens, saved = t_ret + t_fit, []
-    for post, (r1, posted, r2s, t) in zip(posts, sims):
-        tokens += t
+    for post, (r1, posted, r2s, _) in zip(r["posts"], r["sims"]):
         print(f"\n--- {post['platform']} | influencers who would pick it up if it spreads: "
               + (", ".join(f"{inf['label'].split(' ')[1] if ' ' in inf['label'] else inf['label']}"
                            f"[{take} {pp:.2f}]" for inf, take, pp in posted) or "none"))
         print(f"  {'scenario':8} {'pro':>5} {'contra':>6} {'net':>6}  {'posted content':36}  main readers (share, net)")
         for name, (exp, pickup) in SCENARIOS.items():
-            res = scenario(post, personas, influencers, fit, r1, posted, r2s, exp, pickup)
+            res = scenario(post, r["personas"], r["influencers"], fit, r1, posted, r2s, exp, pickup)
             top = ", ".join(f"{lbl.split(',')[0]} {sh:.0%} {n:+.1f}" for sh, lbl, n in res["audience"][:4])
             print(f"  {name:8} {res['pro_r']:5.0%} {res['contra_r']:6.0%} {res['net2']:+6.2f}  {fmt_mix(res['vocal']):36}  {top}")
-        saved.append({"post": post, "round1": r1, "posted": [(i["id"], tk, pp) for i, tk, pp in posted],
-                      "round2": [r for r in r2s]})
     print("\n  pro/contra = share of readers in favor / against; net = mean stance of readers [-2..+2].")
 
-    out = ROOT / "results" / f"issue_{args.id}_{datetime.now():%Y%m%d_%H%M%S}.json"
-    out.parent.mkdir(exist_ok=True)
-    out.write_text(json.dumps({"text": args.text, "subject": args.subject, "target": args.target,
-                               "retrieval": [{"id": c["id"], "similarity": s} for s, c in ranked],
-                               "fit": fit, "segments": chosen_ids, "runs": saved},
-                              ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\nTotal input tokens {tokens:,} ≈ ${tokens * PRICE_PER_MTOK / 1e6:.4f}  | raw: {out}")
+    out = save(r, args.id)
+    print(f"\nTotal input tokens {r['tokens']:,} ≈ ${r['tokens'] * PRICE_PER_MTOK / 1e6:.4f}  | raw: {out}")
 
 
 if __name__ == "__main__":
