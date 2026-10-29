@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["typesafe-sdk>=0.7"]
+# dependencies = ["typesafe-sdk>=0.7.5"]
 # ///
 """End-to-end workflow for a new issue or draft post:
 
@@ -30,7 +30,7 @@ from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
-from typesafe_sdk import AsyncTypeSafeClient, Score
+from typesafe_sdk import AsyncTypeSafeClient, Image, Score
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from rounds import (  # noqa: E402
@@ -90,7 +90,7 @@ def library() -> list[dict]:
     return cases
 
 
-async def retrieve(client, post: str, cases: list[dict]) -> tuple[list[tuple[float, dict]], int]:
+async def retrieve(client, post, cases: list[dict]) -> tuple[list[tuple[float, dict]], int]:
     state = {"new_post": post,
              "library": {c["id"]: {k: c[k] for k in ("category", "subject", "video_titles", "top_comments")}
                          for c in cases}}
@@ -102,9 +102,12 @@ async def retrieve(client, post: str, cases: list[dict]) -> tuple[list[tuple[flo
     return sorted(((r.answers[c["id"]].score, c) for c in cases), key=lambda x: -x[0]), r.usage.input_tokens
 
 
-async def audience_fit(client, post: str, target: str, people: list[dict], messenger: str = "") -> tuple[dict[str, float], int]:
+async def audience_fit(client, post, target: str, people: list[dict], messenger: str = "", earlier=None) -> tuple[dict[str, float], int]:
     state = {"post": post, "people": {p["id"]: public(p, SIM_FIELDS) for p in people}}
     who = "the people who follow this kind of account or topic, or search for it"
+    if earlier:
+        state["earlier"] = earlier
+        who = "the people who saw or reacted to the earlier posts in `earlier`, plus " + who
     if messenger:
         state["messenger"] = messenger
         who = "the people who follow or like the account or person in `messenger`, or follow or search this topic"
@@ -147,23 +150,36 @@ def scenario(post, personas, influencers, fit, r1, posted, r2s, exp: int, pickup
 PLATFORMS = ("Instagram", "TikTok", "Threads", "X/Twitter", "YouTube", "Facebook")
 
 
+IMAGE_HEADERS = {"TypeSafe-Danger-Zone-Images": "true"}   # the client needs this header when the post is an image
+
+
 async def run(client, text: str, subject: str = "", target: str = "", messenger: str = "",
-              platforms=PLATFORMS[:4], run_id: str = "issue") -> dict:
-    """The whole workflow for one post; the CLI report and the web server both read the returned dict."""
+              platforms=PLATFORMS[:4], run_id: str = "issue", image_b64: str = "", earlier: dict | None = None) -> dict:
+    """The whole workflow for one post; the CLI report and the web server both read the returned dict.
+    image_b64: the post as an image (png/jpg), with `text` as its caption if any. earlier: per platform, the
+    account's previous episodes [{"text", "reaction"}] that the personas remember."""
     general = json.loads((ROOT / "personas.json").read_text(encoding="utf-8"))
     fams = segment_families()
     members = [m for fam in fams.values() for m in fam]
     influencers = json.loads((ROOT / "influencers.json").read_text(encoding="utf-8"))
+    post_value = text
+    if image_b64:
+        img = Image.from_base64(image_b64)
+        post_value = {"image": img, "caption": text} if text else img
+    earlier = earlier or {}
+    any_earlier = next((e for e in earlier.values() if e), None)
     (ranked, t_ret), (fit, t_fit) = await asyncio.gather(
-        retrieve(client, text, library()), audience_fit(client, text, target, general + members, messenger))
+        retrieve(client, post_value, library()),
+        audience_fit(client, post_value, target, general + members, messenger, any_earlier))
     best = {sid: max(fit[m["id"]] for m in fam) for sid, fam in fams.items()}
     chosen_ids = sorted((sid for sid in fams if best[sid] >= SEGMENT_MIN_FIT), key=lambda sid: -best[sid])[:MAX_SEGMENTS]
     personas = general + [m for sid in chosen_ids for m in fams[sid]]
-    posts = [{"id": f"{run_id}_{p.split('/')[0].lower()}", "platform": p, "post": text,
+    posts = [{"id": f"{run_id}_{p.split('/')[0].lower()}", "platform": p, "post": post_value,
               **({"subject": subject} if subject else {}),
-              **({"messenger": messenger} if messenger else {})} for p in platforms]
+              **({"messenger": messenger} if messenger else {}),
+              **({"earlier": earlier[p]} if earlier.get(p) else {})} for p in platforms]
     sims = await asyncio.gather(*(simulate(client, p, personas, influencers) for p in posts))
-    return {"text": text, "subject": subject, "target": target, "messenger": messenger, "general": general, "fams": fams,
+    return {"text": text or "[gambar]", "subject": subject, "target": target, "messenger": messenger, "general": general, "fams": fams,
             "influencers": influencers, "ranked": ranked, "fit": fit, "best": best, "chosen_ids": chosen_ids,
             "personas": personas, "posts": posts, "sims": sims, "tokens": t_ret + t_fit + sum(t for *_, t in sims)}
 
@@ -194,7 +210,8 @@ def save(r: dict, run_id: str) -> Path:
     out.write_text(json.dumps({"text": r["text"], "subject": r["subject"], "target": r["target"],
                                "retrieval": [{"id": c["id"], "similarity": s} for s, c in r["ranked"]],
                                "fit": r["fit"], "segments": r["chosen_ids"],
-                               "runs": [{"post": post, "round1": r1, "posted": [(i["id"], tk, pp) for i, tk, pp in posted],
+                               "runs": [{"post": {**post, "post": post["post"] if isinstance(post["post"], str) else "[gambar]"},
+                                         "round1": r1, "posted": [(i["id"], tk, pp) for i, tk, pp in posted],
                                          "round2": list(r2s)} for post, (r1, posted, r2s, _) in zip(r["posts"], r["sims"])]},
                               ensure_ascii=False, indent=2), encoding="utf-8")
     return out

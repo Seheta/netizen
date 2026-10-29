@@ -40,16 +40,18 @@
   .row { display: flex; gap: 8px; flex-wrap: wrap; }
   .pill { min-height: 40px; padding: 0 13px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
   .pill.on { background: var(--ink); color: var(--paper); }
+  .pill.branch { border-style: dashed; }
   .seg { display: flex; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; }
   .seg button { flex: 1; min-height: 42px; border: 0; border-right: 2px solid var(--ink); background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
   .seg button:last-child { border-right: 0; }
   .seg button.on { background: var(--ink); color: var(--paper); }
   .go { min-height: 46px; border: 2px solid var(--ink); border-radius: 8px; background: var(--ink); color: var(--paper); font: inherit; font-size: 15px; cursor: pointer; }
   .go[disabled] { opacity: .5; cursor: wait; }
-  .upl { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+  .ghost { min-height: 40px; padding: 0 13px; border: 2px solid var(--ink); border-radius: 8px; background: var(--paper); color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
+  .upl { display: flex; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
   .upl label.btn { min-height: 40px; display: inline-flex; align-items: center; padding: 0 13px; border: 2px dashed var(--ink); border-radius: 8px; cursor: pointer; font-size: 13px; }
   .upl input { position: absolute; opacity: 0; width: 0; height: 0; }
-  .upl img { height: 40px; border: 2px solid var(--ink); border-radius: 4px; }
+  .upl img { height: 44px; border: 2px solid var(--ink); border-radius: 4px; }
   .bar { display: flex; height: 22px; border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; }
   .bar div { transition: width .4s; }
   .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -57,6 +59,7 @@
   .stats span { font-size: 12px; color: var(--muted); }
   .box { border: 2px dashed var(--ink); border-radius: 8px; padding: 10px 12px; font-size: 13px; }
   .card { border: 2px solid var(--ink); border-radius: 8px; padding: 12px 14px; min-height: 90px; background: var(--paper2); font-size: 13px; }
+  .note { border-left: 3px solid var(--ink); padding: 6px 10px; font-size: 13px; background: var(--paper2); margin-bottom: 8px; }
   .hint { font-size: 12px; color: var(--muted); }
   .err { color: var(--err); font-size: 13px; }
   .hide { display: none !important; }
@@ -91,12 +94,18 @@
   </div>
 
   <div class="panel">
+    <div id="timelineWrap" class="hide">
+      <span class="k" data-i18n="episodes"></span>
+      <div class="row" id="timeline"></div>
+    </div>
     <div>
-      <label class="k" for="text" data-i18n="postLabel"></label>
-      <textarea id="text" data-i18n-ph="postPh"></textarea>
+      <label class="k" for="text" id="postLabel"></label>
+      <div class="note hide" id="followNote"></div>
+      <textarea id="text"></textarea>
       <div class="upl">
-        <label class="btn"><input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif"><span data-i18n="upload"></span></label>
+        <label class="btn"><input type="file" id="file" accept="image/*"><span data-i18n="upload"></span></label>
         <img id="thumb" class="hide" alt="">
+        <button class="ghost hide" id="clearImg" data-i18n="removeImg"></button>
         <span class="hint" id="uplStatus"></span>
       </div>
     </div>
@@ -106,9 +115,13 @@
     </div>
     <div class="row">
       <div style="flex:1"><label class="k" for="messenger" data-i18n="messenger"></label><input type="text" id="messenger" data-i18n-ph="messengerPh"></div>
-      <div style="flex:1"><label class="k" for="pass" data-i18n="pass"></label><input id="pass" type="password" data-i18n-ph="passPh"></div>
+      <div style="flex:1"><label class="k" for="key" data-i18n="key"></label><input id="key" type="password" data-i18n-ph="keyPh"><div class="hint" data-i18n="keyHint"></div></div>
     </div>
-    <button class="go" id="go" data-i18n="run"></button>
+    <button class="go" id="go"></button>
+    <div class="row hide" id="episodeActions">
+      <button class="ghost" id="followBtn" data-i18n="followUp"></button>
+      <button class="ghost" id="resetBtn" data-i18n="startOver"></button>
+    </div>
     <div class="hint" id="status"></div>
     <div class="err hide" id="error"></div>
 
@@ -147,12 +160,17 @@
 const I18N = {
   id: {
     tagline: 'simulasi reaksi netizen Indonesia · persona dinilai oleh Jev (TypeSafe)', dark: 'Gelap',
-    postLabel: 'Post yang diuji', postPh: 'Tempel draf post, judul berita, atau isu yang mau diuji. Atau unggah gambar postingannya.',
-    upload: 'Unggah gambar post', reading: 'Membaca gambar…', readDone: 'Teks diambil dari gambar, boleh diedit.',
+    postLabel: 'Post yang diuji', followLabel: 'Follow-up post', postPh: 'Tempel draf post, judul berita, atau isu yang mau diuji. Atau unggah gambar postingannya.',
+    followPh: 'Tulis post lanjutan dari akun yang sama: klarifikasi, permintaan maaf, pembelaan, atau konten baru.',
+    upload: 'Unggah gambar post', removeImg: 'Hapus gambar', imgReady: 'Gambar siap; teks di atas jadi caption (opsional).', imgBad: 'File gambar tidak terbaca.',
     platforms: 'Platform (maks 4)', messenger: 'Siapa yang posting', messengerPh: 'opsional, mis. akun berita / brand',
-    pass: 'Kode akses', passPh: 'kalau diminta', run: 'Jalankan simulasi', sending: 'Mengirim…',
-    waiting: 'Jev sedang menilai tiap persona… biasanya 1–3 menit.', done: 'Selesai.', latest: 'Menampilkan simulasi terakhir.',
-    pickPlatform: 'Pilih minimal satu platform.', viewPlatform: 'Lihat platform', reach: 'Seberapa jauh menyebar', ramai: 'ramai',
+    key: 'API key TypeSafe', keyPh: 'dari console.typesafe.ai', keyHint: 'dipakai per request, disimpan hanya di browser ini',
+    run: 'Jalankan simulasi', runFollow: 'Jalankan follow-up', sending: 'Mengirim…',
+    waiting: 'Jev sedang menilai tiap persona… biasanya 1–3 menit.', done: 'Selesai.',
+    pickPlatform: 'Pilih minimal satu platform.', needKey: 'Isi API key TypeSafe dulu.', needPost: 'Isi teks post atau unggah gambar.',
+    episodes: 'Episode', followUp: '+ Follow-up dari episode ini', startOver: 'Mulai post baru',
+    followNote: 'Episode {n}: follow-up dari episode {k}. Persona ingat post sebelumnya dan reaksinya.',
+    viewPlatform: 'Lihat platform', reach: 'Seberapa jauh menyebar', ramai: 'ramai',
     hintNiche: 'Hanya lingkaran pertama: yang memang mengikuti topik ini. Influencer belum ikut.',
     hintRamai: 'Menyebar ke feed yang berdekatan minatnya, influencer mulai ikut (30%).',
     hintViral: 'Seluruh audiens platform, influencer ikut penuh.',
@@ -163,17 +181,22 @@ const I18N = {
     infl: 'Influencer yang ikut kalau menyebar:', noInfl: 'Influencer: tidak ada yang cukup tertarik untuk ikut membahas.',
     tokens: 'token input', cardEmpty: 'Klik salah satu karakter untuk melihat siapa dia dan bagaimana sikapnya.',
     noSim: 'Belum ada simulasi untuk persona ini.', stance: 'sikap', ofReaders: 'dari pembaca',
-    tagEmpty: 'limbo · belum ada simulasi', tagWait: 'limbo · menunggu Jev…', tagRes: 'limbo', scenario: 'skenario',
-    legendTail: '· menunduk = tidak berhenti scroll', faces: ['marah', 'skeptis', 'cuek', 'setuju', 'antusias']
+    tagEmpty: 'limbo · belum ada simulasi', tagWait: 'limbo · menunggu Jev…', tagRes: 'limbo', scenario: 'skenario', episode: 'episode',
+    legendTail: '· menunduk = tidak berhenti scroll', faces: ['marah', 'skeptis', 'cuek', 'setuju', 'antusias'], imagePost: '[post gambar]'
   },
   en: {
     tagline: 'Indonesian netizen reaction simulator · personas judged by Jev (TypeSafe)', dark: 'Dark',
-    postLabel: 'Post under test', postPh: 'Paste a draft post, a headline, or an issue to test. Or upload an image of the post.',
-    upload: 'Upload post image', reading: 'Reading the image…', readDone: 'Text taken from the image; feel free to edit.',
+    postLabel: 'Post under test', followLabel: 'Follow-up post', postPh: 'Paste a draft post, a headline, or an issue to test. Or upload an image of the post.',
+    followPh: 'Write the same account’s next post: a clarification, an apology, a defense, or new content.',
+    upload: 'Upload post image', removeImg: 'Remove image', imgReady: 'Image ready; the text above becomes its caption (optional).', imgBad: 'Could not read that image file.',
     platforms: 'Platforms (max 4)', messenger: 'Who posts it', messengerPh: 'optional, e.g. news account / brand',
-    pass: 'Access code', passPh: 'if required', run: 'Run simulation', sending: 'Sending…',
-    waiting: 'Jev is judging every persona… usually 1–3 minutes.', done: 'Done.', latest: 'Showing the latest simulation.',
-    pickPlatform: 'Pick at least one platform.', viewPlatform: 'View platform', reach: 'How far it spreads', ramai: 'buzz',
+    key: 'TypeSafe API key', keyPh: 'from console.typesafe.ai', keyHint: 'sent per request, stored only in this browser',
+    run: 'Run simulation', runFollow: 'Run follow-up', sending: 'Sending…',
+    waiting: 'Jev is judging every persona… usually 1–3 minutes.', done: 'Done.',
+    pickPlatform: 'Pick at least one platform.', needKey: 'Enter your TypeSafe API key first.', needPost: 'Write the post text or upload an image.',
+    episodes: 'Episodes', followUp: '+ Follow-up from this episode', startOver: 'Start a new post',
+    followNote: 'Episode {n}: follow-up to episode {k}. Personas remember the earlier post and how it landed.',
+    viewPlatform: 'View platform', reach: 'How far it spreads', ramai: 'buzz',
     hintNiche: 'First circle only: people who already follow this topic. No influencers yet.',
     hintRamai: 'Spreads to adjacent-interest feeds, influencers start to pick it up (30%).',
     hintViral: 'The whole platform audience, influencers fully on board.',
@@ -184,8 +207,8 @@ const I18N = {
     infl: 'Influencers who join if it spreads:', noInfl: 'Influencers: none care enough to weigh in.',
     tokens: 'input tokens', cardEmpty: 'Click a character to see who they are and how they feel.',
     noSim: 'No simulation for this persona yet.', stance: 'stance', ofReaders: 'of readers',
-    tagEmpty: 'limbo · no simulation yet', tagWait: 'limbo · waiting for Jev…', tagRes: 'limbo', scenario: 'scenario',
-    legendTail: '· head down = did not stop scrolling', faces: ['angry', 'skeptical', 'indifferent', 'agrees', 'excited']
+    tagEmpty: 'limbo · no simulation yet', tagWait: 'limbo · waiting for Jev…', tagRes: 'limbo', scenario: 'scenario', episode: 'episode',
+    legendTail: '· head down = did not stop scrolling', faces: ['angry', 'skeptical', 'indifferent', 'agrees', 'excited'], imagePost: '[image post]'
   }
 };
 let lang = 'id';
@@ -197,7 +220,7 @@ function applyLang() {
   document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = T(el.dataset.i18nPh); });
   document.getElementById('langLbl').textContent = lang === 'en' ? 'EN' : 'ID';
   document.getElementById('langSw').checked = lang === 'en';
-  drawLegend(); renderCard(); render(); setStatus(statusKey);
+  drawLegend(); renderCard(); renderMode(); renderTimeline(); render(); setStatus(statusKey);
   if (!result) document.getElementById('tag').textContent = T('tagEmpty');
 }
 let statusKey = '';
@@ -381,6 +404,9 @@ function drawLegend() {
 // ---------- panel & API
 const $ = id => document.getElementById(id);
 let result = null, viewPlatform = null, scenario = 'ramai', chosen = new Set(['X/Twitter', 'TikTok']), fresh = false;
+let imageB64 = '';
+// episode: pohon post dari akun yang sama. node = {id, parent, text, image, result}; current = yang sedang dilihat
+let episodes = [], current = null, followFrom = null;
 $('platforms').innerHTML = PLATFORMS.map(p => `<button class="pill ${chosen.has(p) ? 'on' : ''}" data-p="${p}">${p}</button>`).join('');
 $('platforms').addEventListener('click', e => {
   const b = e.target.closest('.pill'); if (!b) return;
@@ -391,8 +417,75 @@ $('platforms').addEventListener('click', e => {
 $('scenario').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; scenario = b.dataset.s; render(); });
 $('viewPlatforms').addEventListener('click', e => { const b = e.target.closest('.pill'); if (!b) return; viewPlatform = b.dataset.p; render(); });
 function showError(msg) { $('error').textContent = msg; $('error').classList.remove('hide'); }
+try { $('key').value = localStorage.getItem('netizen.key') || ''; } catch (e) {}
+$('key').addEventListener('change', () => { try { localStorage.setItem('netizen.key', $('key').value.trim()); } catch (e) {} });
+
+// gambar post -> PNG lewat canvas (Jev menerima png/jpg; sisi terpanjang dibatasi 1280px)
+$('file').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  $('error').classList.add('hide');
+  try {
+    const bmp = await createImageBitmap(f);
+    const k = Math.min(1, 1280 / Math.max(bmp.width, bmp.height));
+    const cv = document.createElement('canvas'); cv.width = Math.round(bmp.width * k); cv.height = Math.round(bmp.height * k);
+    cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height);
+    const url = cv.toDataURL('image/png');
+    imageB64 = url.split(',')[1];
+    $('thumb').src = url; $('thumb').classList.remove('hide'); $('clearImg').classList.remove('hide');
+    $('uplStatus').textContent = T('imgReady');
+  } catch (err) { showError(T('imgBad')); }
+  e.target.value = '';
+});
+function clearImage() { imageB64 = ''; $('thumb').classList.add('hide'); $('clearImg').classList.add('hide'); $('uplStatus').textContent = ''; }
+$('clearImg').addEventListener('click', clearImage);
 
 function pct(v) { return Math.round(v * 100); }
+function node(id) { return episodes.find(n => n.id === id); }
+function path(id) { const out = []; for (let n = node(id); n; n = node(n.parent)) out.unshift(n); return out; }
+function depthOf(id) { return path(id).length; }
+function title(n) { return n.text || T('imagePost'); }
+// ringkasan reaksi satu episode per platform, jadi ingatan persona di episode berikutnya (bahasa pertanyaan = Inggris)
+function reactionOf(res, pl) {
+  const p = res.platforms[pl]; if (!p) return '';
+  const sc = p.scenarios.ramai, v = sc.vocal;
+  const infl = p.influencers.length ? p.influencers.map(i => `${i.label.split(' (')[0]} (${i.take})`).join(', ') : 'none';
+  return `Of what netizens posted, ${pct(v.negative)}% was against it, ${pct(v.neutral)}% neutral, ${pct(v.positive)}% in favor; net sentiment ${sc.net.toFixed(2)} on a -2..+2 scale; ${pct(sc.reach)}% stopped to read it; virality ${p.virality.toFixed(1)}/3. Influencers who weighed in: ${infl}.`;
+}
+function earlierFor(id, platforms) {
+  const out = {};
+  for (const pl of platforms) out[pl] = path(id).map(n => ({ text: title(n), reaction: reactionOf(n.result, pl) }));
+  return out;
+}
+function renderMode() {
+  const follow = followFrom != null;
+  $('postLabel').textContent = T(follow ? 'followLabel' : 'postLabel');
+  $('text').placeholder = T(follow ? 'followPh' : 'postPh');
+  $('go').textContent = T(follow ? 'runFollow' : 'run');
+  $('followNote').classList.toggle('hide', !follow);
+  if (follow) $('followNote').textContent = T('followNote').replace('{n}', depthOf(followFrom) + 1).replace('{k}', depthOf(followFrom));
+  $('episodeActions').classList.toggle('hide', !current);
+}
+function renderTimeline() {
+  const wrap = $('timelineWrap');
+  if (!episodes.length) { wrap.classList.add('hide'); return; }
+  wrap.classList.remove('hide');
+  const chain = path(current), kids = episodes.filter(n => n.parent === current);
+  const chip = (n, label, cls) => `<button class="pill ${cls}" data-e="${n.id}" title="${title(n).replace(/"/g, '&quot;')}">${label}</button>`;
+  $('timeline').innerHTML = chain.map((n, i) => chip(n, `${i + 1} · ${title(n).slice(0, 18)}${title(n).length > 18 ? '…' : ''}`, n.id === current ? 'on' : '')).join('') +
+    kids.map(n => chip(n, `↳ ${title(n).slice(0, 18)}${title(n).length > 18 ? '…' : ''}`, 'branch')).join('');
+}
+$('timeline').addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if (!b) return;
+  current = b.dataset.e; result = node(current).result; followFrom = null; fresh = true;
+  renderMode(); renderTimeline(); render();
+});
+$('followBtn').addEventListener('click', () => { followFrom = current; $('text').value = ''; clearImage(); renderMode(); $('text').focus(); });
+$('resetBtn').addEventListener('click', () => {
+  episodes = []; current = null; followFrom = null; result = null; chars = []; charsEl.innerHTML = ''; selected = null;
+  $('text').value = ''; clearImage();
+  $('result').classList.add('hide'); setStatus(''); $('tag').textContent = T('tagEmpty'); renderMode(); renderTimeline(); renderCard();
+});
+
 function render() {
   if (!result) return;
   const pls = Object.keys(result.platforms);
@@ -401,7 +494,7 @@ function render() {
   for (const b of $('scenario').children) b.classList.toggle('on', b.dataset.s === scenario);
   $('scenarioHint').textContent = T({ niche: 'hintNiche', ramai: 'hintRamai', viral: 'hintViral' }[scenario]);
   const pl = result.platforms[viewPlatform], sc = pl.scenarios[scenario], v = sc.vocal;
-  $('tag').textContent = `${T('tagRes')} · ${viewPlatform} · ${T('scenario')} ${scenario === 'ramai' ? T('ramai') : scenario}`;
+  $('tag').textContent = `${T('tagRes')} · ${viewPlatform} · ${T('scenario')} ${scenario === 'ramai' ? T('ramai') : scenario}` + (current && episodes.length > 1 ? ` · ${T('episode')} ${depthOf(current)}` : '');
   $('bNeg').style.width = pct(v.negative) + '%'; $('bNeu').style.width = pct(v.neutral) + '%'; $('bPos').style.width = pct(v.positive) + '%';
   $('tNeg').textContent = `${pct(v.negative)}% ${T('against')}`; $('tNeu').textContent = `${pct(v.neutral)}% ${T('neutral')}`; $('tPos').textContent = `${pct(v.positive)}% ${T('support')}`;
   $('sReach').textContent = pct(sc.reach) + '%'; $('sNet').textContent = (sc.net >= 0 ? '+' : '') + sc.net.toFixed(2); $('sVir').textContent = pl.virality.toFixed(1);
@@ -418,42 +511,31 @@ function render() {
   $('result').classList.remove('hide');
 }
 
-async function poll(id) {
+async function poll(id, pending) {
   const r = await fetch('api/run/' + id).then(r => r.json());
-  if (r.status === 'running') { setStatus('waiting'); return setTimeout(() => poll(id), 3000); }
+  if (r.status === 'running') { setStatus('waiting'); return setTimeout(() => poll(id, pending), 3000); }
   $('go').disabled = false;
   if (r.status === 'error') { setStatus(''); showError(r.error); return; }
-  result = r.result; fresh = true; setStatus('done'); render();
+  pending.result = r.result; episodes.push(pending); current = pending.id; followFrom = null;
+  result = r.result; fresh = true; setStatus('done'); renderMode(); renderTimeline(); render();
 }
 $('go').addEventListener('click', async () => {
   $('error').classList.add('hide');
-  const body = { text: $('text').value, platforms: PLATFORMS.filter(p => chosen.has(p)), messenger: $('messenger').value, pass: $('pass').value };
-  if (!body.platforms.length) return showError(T('pickPlatform'));
+  const key = $('key').value.trim(), text = $('text').value.trim(), platforms = PLATFORMS.filter(p => chosen.has(p));
+  if (!key) return showError(T('needKey'));
+  if (!text && !imageB64) return showError(T('needPost'));
+  if (!platforms.length) return showError(T('pickPlatform'));
+  const body = { key, text, image: imageB64, platforms, messenger: $('messenger').value };
+  if (followFrom) body.earlier = earlierFor(followFrom, platforms);
   $('go').disabled = true; setStatus('sending');
   const r = await fetch('api/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const j = await r.json();
   if (!r.ok) { $('go').disabled = false; setStatus(''); return showError(j.error || r.statusText); }
   $('tag').textContent = T('tagWait');
   setCast([]);
-  poll(j.id);
+  poll(j.id, { id: j.id, parent: followFrom, text, image: !!imageB64, result: null });
 });
 
-// gambar post -> teks (server memanggil Claude), lalu masuk ke textarea untuk diedit
-$('file').addEventListener('change', async e => {
-  const f = e.target.files[0]; if (!f) return;
-  $('error').classList.add('hide'); $('uplStatus').textContent = T('reading');
-  const dataUrl = await new Promise((ok, no) => { const rd = new FileReader(); rd.onload = () => ok(rd.result); rd.onerror = no; rd.readAsDataURL(f); });
-  $('thumb').src = dataUrl; $('thumb').classList.remove('hide');
-  const r = await fetch('api/describe', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ image: dataUrl.split(',')[1], media_type: f.type, pass: $('pass').value }) });
-  const j = await r.json();
-  $('uplStatus').textContent = '';
-  if (!r.ok) return showError(j.error || r.statusText);
-  $('text').value = j.text; $('uplStatus').textContent = T('readDone');
-  e.target.value = '';
-});
-
-// awal: tema dan bahasa tersimpan, persona umum berkeliaran tanpa ekspresi, lalu hasil terakhir kalau ada
 applyTheme(); applyLang();
 </script>
 </body>

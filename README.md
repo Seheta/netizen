@@ -12,13 +12,15 @@ Demo: https://moddestlab.com/netizen/
 
 ## Menjalankan
 
-Butuh `uv` dan `TYPESAFE_API_KEY` di `.env`. Semua dari folder ini.
+Butuh `uv`. Skrip CLI membaca `TYPESAFE_API_KEY` dari `.env`; halaman web memakai key yang diisi pengguna sendiri per request (tidak disimpan server). Semua dari folder ini.
 
 ```bash
 uv run spike/run_issue.py --text "draf post kamu" --platforms X/Twitter,TikTok   # laporan di terminal
 uv run spike/server.py                                                            # web di http://localhost:8798
 uv run spike/backtest_youtube.py train                                            # uji terhadap komentar YouTube asli
 ```
+
+Post bisa berupa teks atau gambar (png/jpg, langsung dinilai Jev). Di web, sebuah post bisa dilanjutkan dengan **episode** berikutnya (klarifikasi, pembelaan, konten baru): persona diberi tahu post sebelumnya dan bagaimana reaksinya, dan timeline bisa mundur atau bercabang.
 
 `spike/personas.json`, `interest_segments.json`, `variants.json`, dan `influencers.json` adalah dunianya; `data/library/youtube_labels` adalah kasus nyata yang sudah dilabeli. Hasil run tersimpan di `spike/results/` (tidak di-commit).
 

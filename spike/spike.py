@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["typesafe-sdk>=0.7"]
+# dependencies = ["typesafe-sdk>=0.7.5"]
 # ///
 """Spike: can Jev judge how Indonesian netizen personas react to a post?
 
@@ -100,16 +100,22 @@ def comment_kinds(about: str) -> dict[str, str]:
     return {k: v.format(about=about) for k, v in COMMENT_KIND_TEXT.items()}
 
 
-def persona_questions(pid: str, subject: str = "", has_messenger: bool = False) -> dict:
+# A follow-up episode: `earlier` lists what the same account posted before and how netizens reacted.
+EARLIER = ("This is a follow-up: `earlier` lists what the same account posted before and how netizens reacted "
+           "to it; this person remembers that. ")
+
+
+def persona_questions(pid: str, subject: str = "", has_messenger: bool = False, has_earlier: bool = False) -> dict:
     p = f"`personas.{pid}`"
     about = subject or GENERIC_SUBJECT
+    ctx = EARLIER if has_earlier else ""
     # The subject is written into each instruction: a reference to a `subject` state field weakened
     # stances (boycott +1.4 inline vs +0.3 by reference), and a messenger who argues one side pulled
     # personas toward that side unless the question says it is about their own view.
     return {
         f"{pid}__stop": Noul(
             instructions=(
-                f"`post`{' by `messenger`' if has_messenger else ''} appears in the social media feed of the Indonesian "
+                f"{ctx}`post`{' by `messenger`' if has_messenger else ''} appears in the social media feed of the Indonesian "
                 f"netizen described in {p}. Given their interests, platforms, and habits"
                 f"{', and how they feel about that account or person (people mostly watch speakers they like or follow)' if has_messenger else ''}, "
                 f"would this person stop scrolling and actually read or watch it?"
@@ -117,7 +123,7 @@ def persona_questions(pid: str, subject: str = "", has_messenger: bool = False) 
         ),
         f"{pid}__action": Choice(
             instructions=(
-                f"Assume the Indonesian netizen described in {p} has seen `post`. "
+                f"{ctx}Assume the Indonesian netizen described in {p} has seen `post`. "
                 f"Which visible action would this specific person most likely take, given how people like them "
                 f"usually behave on `platform`?"
             ),
@@ -125,24 +131,24 @@ def persona_questions(pid: str, subject: str = "", has_messenger: bool = False) 
         ),
         f"{pid}__stance": Score(
             instructions=(
-                f"After seeing `post`, how does the Indonesian netizen described in {p} feel about {about}? "
+                f"{ctx}After seeing `post`, how does the Indonesian netizen described in {p} feel about {about}? "
                 f"This is their own view of it, not whether they agree with `post`: if the post argues against it, "
                 f"people who support it disagree with the post. Read sarcasm and irony for what they really mean."
             ),
             criteria=STANCE_LEVELS,
         ),
-        f"{pid}__comment": comment_question(p, about, has_messenger),
+        f"{pid}__comment": comment_question(p, about, has_messenger, has_earlier),
     }
 
 
-def comment_question(p: str, about: str, has_messenger: bool = False) -> Choice:
+def comment_question(p: str, about: str, has_messenger: bool = False, has_earlier: bool = False) -> Choice:
     # Stance and action are asked independently, so "comment_support" × "somewhat against" used to
     # count as a negative comment. Posted content takes its tone from this question instead.
     # Comments react to the speaker as much as to the issue (videos of a popular governor drew 90%+ praise).
     who = "`messenger`" if has_messenger else "the account that posted it and the people who appear in it"
     return Choice(
         instructions=(
-            f"Suppose the Indonesian netizen described in {p} does write a public comment under `post`. The subject "
+            f"{EARLIER if has_earlier else ''}Suppose the Indonesian netizen described in {p} does write a public comment under `post`. The subject "
             f"is {about}; the speaker is {who}. How this person feels about the speaker matters as much as the issue. "
             f"What would their comment mainly do?"
         ),
