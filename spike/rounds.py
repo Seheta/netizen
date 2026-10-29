@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["typesafe-sdk>=0.7"]
+# dependencies = ["typesafe-sdk>=0.7.5"]
 # ///
 """Two-round simulation: netizens see a post, influencers react, followers see the influencer's take.
 
@@ -29,7 +29,7 @@ from typesafe_sdk import AsyncTypeSafeClient, Choice, Score
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from spike import (  # noqa: E402
-    ACTIONS, POST_QUESTIONS, PRICE_PER_MTOK, SIM_FIELDS, STANCE_LEVELS, VOCAL,
+    ACTIONS, EARLIER, POST_QUESTIONS, PRICE_PER_MTOK, SIM_FIELDS, STANCE_LEVELS, VOCAL,
     audience_weight, bucket, load_env, persona_questions, tone_of, kind_probs, comment_question, position_question, GENERIC_SUBJECT,
 )
 
@@ -64,16 +64,17 @@ def about(post: dict) -> str:
 
 def influencer_questions(iid: str, post: dict) -> dict:
     i = f"`influencers.{iid}`"
+    ctx = EARLIER if post.get("earlier") else ""
     return {
         f"{iid}__take": Choice(
             instructions=(
-                f"`post` is spreading on Indonesian social media. Would the Indonesian influencer described in {i} "
+                f"{ctx}`post` is spreading on Indonesian social media. Would the Indonesian influencer described in {i} "
                 f"post about it to their own followers, and if so with what kind of take? Unpaid, on their own initiative."
             ),
             criteria=TAKES,
         ),
         f"{iid}__stance": Score(
-            instructions=f"How does the influencer described in {i} personally feel about {about(post)}?",
+            instructions=f"{ctx}How does the influencer described in {i} personally feel about {about(post)}?",
             criteria=STANCE_LEVELS,
         ),
     }
@@ -93,10 +94,11 @@ SHIFT_LEVELS = [
 
 def round2_questions(pid: str, post: dict) -> dict:
     p = f"`personas.{pid}`"
+    ctx = EARLIER if post.get("earlier") else ""
     return {
         f"{pid}__shift": Score(
             instructions=(
-                f"The Indonesian netizen described in {p} follows the influencer in `influencer`. After seeing `post` they "
+                f"{ctx}The Indonesian netizen described in {p} follows the influencer in `influencer`. After seeing `post` they "
                 f"felt as in `personas.{pid}.stance_before`. Then they saw the influencer's take, described in "
                 f"`influencer_take`. Given how much this person trusts, likes, or dislikes this kind of influencer, how does "
                 f"the take change their feeling about {about(post)}, compared with before?"
@@ -111,7 +113,7 @@ def round2_questions(pid: str, post: dict) -> dict:
             ),
             criteria=ACTIONS,
         ),
-        f"{pid}__comment": comment_question(p, about(post), bool(post.get("messenger"))),
+        f"{pid}__comment": comment_question(p, about(post), bool(post.get("messenger")), bool(post.get("earlier"))),
     }
 
 
@@ -146,10 +148,10 @@ def merge(responses: list[dict]) -> dict:
 
 async def round1(client, post: dict, personas: list[dict], influencers: list[dict]) -> dict:
     base = {"platform": post["platform"], "post": post["post"]}
-    for k in ("messenger",):
+    for k in ("messenger", "earlier"):
         if post.get(k):
             base[k] = post[k]
-    flags = (post.get("subject", ""), bool(post.get("messenger")))
+    flags = (post.get("subject", ""), bool(post.get("messenger")), bool(post.get("earlier")))
     jobs = [ask(client, {**base, "influencers": {i["id"]: public(i, INFLUENCER_SIM_FIELDS) for i in influencers}},
                 {**POST_QUESTIONS, "post__position": position_question(about(post)), **{k: v for i in influencers for k, v in influencer_questions(i["id"], post).items()}})]
     for start in range(0, len(personas), CHUNK):
@@ -164,7 +166,7 @@ async def round2(client, post: dict, personas: list[dict], inf: dict, take: str,
     a1 = r1["answers"]
     base = {"platform": post["platform"], "post": post["post"], "influencer": public(inf, INFLUENCER_SIM_FIELDS),
             "influencer_take": take}
-    for k in ("messenger",):
+    for k in ("messenger", "earlier"):
         if post.get(k):
             base[k] = post[k]
     jobs = []

@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["typesafe-sdk>=0.7"]
+# dependencies = ["typesafe-sdk>=0.7.5"]
 # ///
 """Backtest the new-issue workflow against the YouTube case library.
 
