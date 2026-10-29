@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["typesafe-sdk>=0.7"]
+# dependencies = ["typesafe-sdk>=0.7", "anthropic>=1"]
 # ///
 """Server web netizen: halaman web/ + API ke run_issue.run.
 
@@ -9,8 +9,10 @@ GET  /api/personas                                   -> persona umum (id, label)
 GET  /api/latest                                     -> hasil simulasi terakhir yang selesai
 POST /api/run  {"text", "platforms"?, "subject"?, "messenger"?, "target"?, "pass"?} -> {"id"}
 GET  /api/run/<id>                                   -> {"status": running|done|error, "result"?, "error"?}
-NETIZEN_PASS di .env: kalau diset, POST /api/run wajib membawa "pass" yang sama (halaman publik, tiap run
-memakan token). Satu simulasi berjalan pada satu waktu; permintaan lain dapat 429.
+POST /api/describe {"image": <base64>, "media_type", "pass"?} -> {"text"}  gambar post jadi teks (Claude)
+NETIZEN_PASS di .env: kalau diset, POST wajib membawa "pass" yang sama (halaman publik, tiap run memakan
+token). ANTHROPIC_API_KEY dibutuhkan hanya untuk /api/describe. Satu simulasi berjalan pada satu waktu;
+permintaan lain dapat 429.
 """
 
 import asyncio
@@ -54,6 +56,11 @@ def worker(job_id: str, req: dict) -> None:
         BUSY.release()
 
 
+def pass_ok(body: dict) -> bool:
+    want = os.environ.get("NETIZEN_PASS", "")
+    return not want or str(body.get("pass", "")) == want
+
+
 def validate(body: dict) -> dict | str:
     text = str(body.get("text", "")).strip()
     if not 10 <= len(text) <= 1000:
@@ -62,10 +69,33 @@ def validate(body: dict) -> dict | str:
     if not isinstance(platforms, list) or not 1 <= len(platforms) <= 4 or any(p not in PLATFORMS for p in platforms):
         return "platforms harus 1 sampai 4 dari " + ", ".join(PLATFORMS)
     extra = {k: str(body.get(k, ""))[:200].strip() for k in ("subject", "messenger", "target")}
-    want = os.environ.get("NETIZEN_PASS", "")
-    if want and str(body.get("pass", "")) != want:
+    if not pass_ok(body):
         return "kode akses salah"
     return {"text": text, "platforms": platforms, **extra}
+
+
+IMAGE_TYPES = ("image/png", "image/jpeg", "image/webp", "image/gif")
+DESCRIBE_PROMPT = (
+    "Gambar ini adalah tangkapan layar atau gambar sebuah postingan media sosial yang akan diuji reaksinya. "
+    "Tulis ulang postingan itu sebagai teks: salin teks yang terbaca (caption, judul, teks di dalam gambar) apa adanya, "
+    "lalu kalau ada gambar atau foto tambahkan satu kalimat pendek yang menggambarkannya dalam kurung. "
+    "Jangan tambahkan komentar, penilaian, atau penjelasan lain. Pakai bahasa yang sama dengan postingannya."
+)
+
+
+def describe(image_b64: str, media_type: str) -> str:
+    """Post berupa gambar dijadikan teks oleh Claude; simulasi tetap berjalan di atas teks."""
+    import anthropic
+    client = anthropic.Anthropic()
+    r = client.messages.create(
+        model="claude-opus-5-5", max_tokens=1500,
+        messages=[{"role": "user", "content": [
+            {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": image_b64}},
+            {"type": "text", "text": DESCRIBE_PROMPT}]}],
+        extra_headers={"anthropic-beta": "server-side-fallback-2026-07-01"}, extra_body={"fallbacks": "default"})
+    if r.stop_reason == "refusal":
+        raise ValueError("gambar ditolak oleh pengaman model")
+    return "".join(b.text for b in r.content if b.type == "text").strip()[:1000]
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -97,13 +127,28 @@ class Handler(SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
-        if self.path != "/api/run":
+        if self.path not in ("/api/run", "/api/describe"):
             return self.send_json(404, {"error": "tidak ada"})
+        limit = 8_000_000 if self.path == "/api/describe" else 16_000
         try:
-            body = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length", 0)), 16000)) or b"{}")
+            body = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length", 0)), limit)) or b"{}")
         except ValueError:
             return self.send_json(400, {"error": "JSON tidak valid"})
-        req = validate(body if isinstance(body, dict) else {})
+        if not isinstance(body, dict):
+            body = {}
+        if self.path == "/api/describe":
+            if not pass_ok(body):
+                return self.send_json(400, {"error": "kode akses salah"})
+            if body.get("media_type") not in IMAGE_TYPES or not isinstance(body.get("image"), str) or not body["image"]:
+                return self.send_json(400, {"error": "kirim image base64 dengan media_type png/jpeg/webp/gif"})
+            if not os.environ.get("ANTHROPIC_API_KEY"):
+                return self.send_json(503, {"error": "server belum punya ANTHROPIC_API_KEY untuk membaca gambar"})
+            try:
+                return self.send_json(200, {"text": describe(body["image"], body["media_type"])})
+            except Exception as e:
+                traceback.print_exc()
+                return self.send_json(502, {"error": f"gagal membaca gambar: {type(e).__name__}: {e}"})
+        req = validate(body)
         if isinstance(req, str):
             return self.send_json(400, {"error": req})
         if not BUSY.acquire(blocking=False):

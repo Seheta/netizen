@@ -3,50 +3,74 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>netizen · simulasi reaksi netizen Indonesia</title>
+<title>netizen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
-  :root { --ink: #1a1a1a; --muted: #6b7280; --neg: #ea580c; --neu: #d1d5db; --pos: #2563eb; }
+  :root { --ink: #1a1a1a; --paper: #ffffff; --paper2: #fafafa; --muted: #6b7280; --line: #d1d5db; --neg: #ea580c; --neu: #d1d5db; --pos: #2563eb; --negT: #9a3412; --posT: #1e40af; --err: #b91c1c; }
+  html[data-theme="dark"] { --ink: #ededed; --paper: #141414; --paper2: #1c1c1c; --muted: #9ca3af; --line: #3f3f46; --neu: #4b5563; --negT: #fdba74; --posT: #93c5fd; --err: #fca5a5; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: #fff; color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
   .hand { font-family: "Patrick Hand", cursive; }
-  .app { display: flex; min-height: 100vh; }
-  .stage { position: relative; flex: 1 1 600px; min-width: 0; height: 100vh; min-height: 640px; overflow: hidden; }
+  nav { height: 52px; border-bottom: 2px solid var(--ink); display: flex; align-items: center; gap: 18px; padding: 0 20px; }
+  nav .brand { font-size: 28px; line-height: 1; }
+  nav .sub { font-size: 12px; color: var(--muted); }
+  nav .spacer { flex: 1; }
+  .sw { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; user-select: none; }
+  .sw input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .sw .track { position: relative; width: 44px; height: 24px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); transition: background .2s; }
+  .sw .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); transition: transform .2s; }
+  .sw input:checked + .track { background: var(--ink); }
+  .sw input:checked + .track::after { transform: translateX(20px); background: var(--paper); }
+  .sw input:focus-visible + .track { outline: 2px solid var(--pos); outline-offset: 2px; }
+  .app { display: flex; height: calc(100vh - 52px); }
+  .stage { position: relative; flex: 1 1 600px; min-width: 0; height: 100%; min-height: 560px; overflow: hidden; }
   .stage svg.floor { position: absolute; left: 50%; top: 54%; transform: translate(-50%, -50%); width: min(880px, 96%); height: auto; filter: url(#sk); }
   .char { position: absolute; padding: 0; border: 0; background: none; cursor: pointer; transform-origin: 50% 100%; }
   .char.sel { outline: 3px solid var(--ink); outline-offset: 6px; border-radius: 50%; }
   .char svg { display: block; overflow: visible; filter: url(#sk); }
-  .tag { position: absolute; left: 32px; top: 24px; font-size: 22px; color: var(--muted); }
-  .legend { position: absolute; left: 32px; bottom: 20px; display: flex; gap: 18px; flex-wrap: wrap; align-items: center; font-size: 17px; color: #374151; }
+  .tag { position: absolute; left: 32px; top: 20px; font-size: 22px; color: var(--muted); }
+  .legend { position: absolute; left: 32px; bottom: 18px; display: flex; gap: 18px; flex-wrap: wrap; align-items: center; font-size: 17px; color: var(--muted); }
   .legend div { display: flex; gap: 6px; align-items: center; }
-  .panel { width: 400px; flex: 0 0 400px; border-left: 2px solid var(--ink); padding: 28px 26px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; height: 100vh; }
-  label.k, .k { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-  textarea, input { width: 100%; border: 2px solid var(--ink); border-radius: 6px; padding: 9px 11px; font: inherit; color: var(--ink); background: #fff; }
-  textarea { resize: vertical; min-height: 92px; }
+  .panel { width: 400px; flex: 0 0 400px; border-left: 2px solid var(--ink); padding: 24px 26px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; height: 100%; }
+  .k { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px; }
+  textarea, input[type=text], input[type=password] { width: 100%; border: 2px solid var(--ink); border-radius: 6px; padding: 9px 11px; font: inherit; color: var(--ink); background: var(--paper); }
+  textarea { resize: vertical; min-height: 96px; }
+  textarea::placeholder, input::placeholder { color: var(--muted); }
   .row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .pill { min-height: 40px; padding: 0 13px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; color: var(--ink); font-size: 13px; cursor: pointer; }
-  .pill.on { background: var(--ink); color: #fff; }
+  .pill { min-height: 40px; padding: 0 13px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
+  .pill.on { background: var(--ink); color: var(--paper); }
   .seg { display: flex; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; }
-  .seg button { flex: 1; min-height: 42px; border: 0; border-right: 2px solid var(--ink); background: #fff; color: var(--ink); font: inherit; cursor: pointer; }
+  .seg button { flex: 1; min-height: 42px; border: 0; border-right: 2px solid var(--ink); background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; }
   .seg button:last-child { border-right: 0; }
-  .seg button.on { background: var(--ink); color: #fff; }
-  .go { min-height: 46px; border: 2px solid var(--ink); border-radius: 8px; background: var(--ink); color: #fff; font: inherit; font-size: 15px; cursor: pointer; }
+  .seg button.on { background: var(--ink); color: var(--paper); }
+  .go { min-height: 46px; border: 2px solid var(--ink); border-radius: 8px; background: var(--ink); color: var(--paper); font: inherit; font-size: 15px; cursor: pointer; }
   .go[disabled] { opacity: .5; cursor: wait; }
+  .upl { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+  .upl label.btn { min-height: 40px; display: inline-flex; align-items: center; padding: 0 13px; border: 2px dashed var(--ink); border-radius: 8px; cursor: pointer; font-size: 13px; }
+  .upl input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .upl img { height: 40px; border: 2px solid var(--ink); border-radius: 4px; }
   .bar { display: flex; height: 22px; border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; }
   .bar div { transition: width .4s; }
   .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .stats b { display: block; font-weight: 400; font-size: 30px; line-height: 1; }
   .stats span { font-size: 12px; color: var(--muted); }
   .box { border: 2px dashed var(--ink); border-radius: 8px; padding: 10px 12px; font-size: 13px; }
-  .card { border: 2px solid var(--ink); border-radius: 8px; padding: 12px 14px; min-height: 90px; background: #fafafa; font-size: 13px; }
+  .card { border: 2px solid var(--ink); border-radius: 8px; padding: 12px 14px; min-height: 90px; background: var(--paper2); font-size: 13px; }
   .hint { font-size: 12px; color: var(--muted); }
-  .err { color: #b91c1c; font-size: 13px; }
-  .hide { display: none; }
-  @media (max-width: 900px) { .app { flex-direction: column; } .stage { height: 62vh; min-height: 420px; } .panel { width: auto; flex: none; height: auto; border-left: 0; border-top: 2px solid var(--ink); } }
+  .err { color: var(--err); font-size: 13px; }
+  .hide { display: none !important; }
+  @media (max-width: 900px) { .app { flex-direction: column; height: auto; } .stage { height: 60vh; min-height: 420px; } .panel { width: auto; flex: none; height: auto; border-left: 0; border-top: 2px solid var(--ink); } nav .sub { display: none; } }
 </style>
 </head>
 <body>
+<nav>
+  <span class="brand hand">netizen</span>
+  <span class="sub" data-i18n="tagline"></span>
+  <span class="spacer"></span>
+  <label class="sw"><input type="checkbox" id="themeSw"><span class="track"></span><span data-i18n="dark"></span></label>
+  <label class="sw"><input type="checkbox" id="langSw"><span class="track"></span><span id="langLbl">EN</span></label>
+</nav>
 <div class="app">
   <div class="stage" id="stage">
     <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -56,89 +80,160 @@
       </filter>
     </svg>
     <svg class="floor" width="880" height="420" viewBox="0 0 880 420" aria-hidden="true">
-      <ellipse cx="440" cy="210" rx="380" ry="170" fill="#fafafa" stroke="#1a1a1a" stroke-width="2.5"></ellipse>
-      <ellipse cx="440" cy="210" rx="300" ry="134" fill="none" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="6 9" opacity=".35"></ellipse>
+      <ellipse cx="440" cy="210" rx="380" ry="170" fill="var(--paper2)" stroke="var(--ink)" stroke-width="2.5"></ellipse>
+      <ellipse cx="440" cy="210" rx="300" ry="134" fill="none" stroke="var(--ink)" stroke-width="1" stroke-dasharray="6 9" opacity=".35"></ellipse>
     </svg>
-    <div class="tag hand" id="tag">limbo · belum ada simulasi</div>
+    <div class="tag hand" id="tag"></div>
     <div id="chars"></div>
     <div class="legend hand" id="legend"></div>
   </div>
 
   <div class="panel">
     <div>
-      <div class="hand" style="font-size:34px;line-height:1">netizen</div>
-      <div class="hint">simulasi reaksi netizen Indonesia · persona dinilai oleh Jev (TypeSafe)</div>
+      <label class="k" for="text" data-i18n="postLabel"></label>
+      <textarea id="text" data-i18n-ph="postPh"></textarea>
+      <div class="upl">
+        <label class="btn"><input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif"><span data-i18n="upload"></span></label>
+        <img id="thumb" class="hide" alt="">
+        <span class="hint" id="uplStatus"></span>
+      </div>
     </div>
     <div>
-      <label class="k" for="text">Post yang diuji</label>
-      <textarea id="text" placeholder="Tempel draf post, judul berita, atau isu yang mau diuji">Gaji dipotong 3% buat Tapera. Katanya tabungan perumahan, tapi yang sudah punya rumah pun wajib ikut. Ini tabungan atau pajak baru?</textarea>
-    </div>
-    <div>
-      <div class="k" style="margin-bottom:6px">Platform (maks 4)</div>
+      <span class="k" data-i18n="platforms"></span>
       <div class="row" id="platforms"></div>
     </div>
     <div class="row">
-      <div style="flex:1"><label class="k" for="messenger">Siapa yang posting</label><input id="messenger" placeholder="opsional, mis. akun berita / brand"></div>
-      <div style="flex:1"><label class="k" for="pass">Kode akses</label><input id="pass" type="password" placeholder="kalau diminta"></div>
+      <div style="flex:1"><label class="k" for="messenger" data-i18n="messenger"></label><input type="text" id="messenger" data-i18n-ph="messengerPh"></div>
+      <div style="flex:1"><label class="k" for="pass" data-i18n="pass"></label><input id="pass" type="password" data-i18n-ph="passPh"></div>
     </div>
-    <button class="go" id="go">Jalankan simulasi</button>
+    <button class="go" id="go" data-i18n="run"></button>
     <div class="hint" id="status"></div>
     <div class="err hide" id="error"></div>
 
     <div id="result" class="hide" style="display:flex;flex-direction:column;gap:18px">
       <div>
-        <div class="k" style="margin-bottom:6px">Lihat platform</div>
+        <span class="k" data-i18n="viewPlatform"></span>
         <div class="row" id="viewPlatforms"></div>
       </div>
       <div>
-        <div class="k" style="margin-bottom:6px">Seberapa jauh menyebar</div>
+        <span class="k" data-i18n="reach"></span>
         <div class="seg" id="scenario">
-          <button data-s="niche">niche</button><button data-s="ramai" class="on">ramai</button><button data-s="viral">viral</button>
+          <button data-s="niche">niche</button><button data-s="ramai" class="on" data-i18n="ramai"></button><button data-s="viral">viral</button>
         </div>
         <div class="hint" id="scenarioHint"></div>
       </div>
       <div>
-        <div class="k" style="margin-bottom:6px">Konten yang akan terposting</div>
+        <span class="k" data-i18n="posted"></span>
         <div class="bar"><div id="bNeg" style="background:var(--neg)"></div><div id="bNeu" style="background:var(--neu)"></div><div id="bPos" style="background:var(--pos)"></div></div>
-        <div class="row" style="justify-content:space-between;font-size:13px;margin-top:6px"><span style="color:#9a3412" id="tNeg"></span><span style="color:#4b5563" id="tNeu"></span><span style="color:#1e40af" id="tPos"></span></div>
+        <div class="row" style="justify-content:space-between;font-size:13px;margin-top:6px"><span style="color:var(--negT)" id="tNeg"></span><span style="color:var(--muted)" id="tNeu"></span><span style="color:var(--posT)" id="tPos"></span></div>
       </div>
       <div class="stats">
-        <div><b class="hand" id="sReach"></b><span>berhenti scroll</span></div>
-        <div><b class="hand" id="sNet"></b><span>net sentimen (−2..+2)</span></div>
-        <div><b class="hand" id="sVir"></b><span>viralitas (0..3)</span></div>
+        <div><b class="hand" id="sReach"></b><span data-i18n="stopped"></span></div>
+        <div><b class="hand" id="sNet"></b><span data-i18n="net"></span></div>
+        <div><b class="hand" id="sVir"></b><span data-i18n="virality"></span></div>
       </div>
       <div class="box" id="anchors"></div>
       <div class="box" id="influencers"></div>
       <div class="hint" id="cost"></div>
     </div>
-    <div class="card" id="card" style="margin-top:auto"><span class="hint">Klik salah satu karakter untuk melihat siapa dia dan bagaimana sikapnya.</span></div>
+    <div class="card" id="card" style="margin-top:auto"></div>
   </div>
 </div>
 
 <script>
-// ---------- potongan visual (path SVG; kepala pusat 30,24 r21; badan pusat 30,56)
+// ---------- bahasa
+const I18N = {
+  id: {
+    tagline: 'simulasi reaksi netizen Indonesia · persona dinilai oleh Jev (TypeSafe)', dark: 'Gelap',
+    postLabel: 'Post yang diuji', postPh: 'Tempel draf post, judul berita, atau isu yang mau diuji. Atau unggah gambar postingannya.',
+    upload: 'Unggah gambar post', reading: 'Membaca gambar…', readDone: 'Teks diambil dari gambar, boleh diedit.',
+    platforms: 'Platform (maks 4)', messenger: 'Siapa yang posting', messengerPh: 'opsional, mis. akun berita / brand',
+    pass: 'Kode akses', passPh: 'kalau diminta', run: 'Jalankan simulasi', sending: 'Mengirim…',
+    waiting: 'Jev sedang menilai tiap persona… biasanya 1–3 menit.', done: 'Selesai.', latest: 'Menampilkan simulasi terakhir.',
+    pickPlatform: 'Pilih minimal satu platform.', viewPlatform: 'Lihat platform', reach: 'Seberapa jauh menyebar', ramai: 'ramai',
+    hintNiche: 'Hanya lingkaran pertama: yang memang mengikuti topik ini. Influencer belum ikut.',
+    hintRamai: 'Menyebar ke feed yang berdekatan minatnya, influencer mulai ikut (30%).',
+    hintViral: 'Seluruh audiens platform, influencer ikut penuh.',
+    posted: 'Konten yang akan terposting', against: 'menentang', neutral: 'netral', support: 'mendukung',
+    stopped: 'berhenti scroll', net: 'net sentimen (−2..+2)', virality: 'viralitas (0..3)',
+    anchor: 'Jangkar kasus nyata:', anchorLike: 'mirip', anchorN: 'komentar YouTube asli',
+    noAnchor: 'Tidak ada jangkar kasus nyata', noAnchorTail: 'yang cukup mirip; angka di atas tanpa pembanding data asli (terdekat',
+    infl: 'Influencer yang ikut kalau menyebar:', noInfl: 'Influencer: tidak ada yang cukup tertarik untuk ikut membahas.',
+    tokens: 'token input', cardEmpty: 'Klik salah satu karakter untuk melihat siapa dia dan bagaimana sikapnya.',
+    noSim: 'Belum ada simulasi untuk persona ini.', stance: 'sikap', ofReaders: 'dari pembaca',
+    tagEmpty: 'limbo · belum ada simulasi', tagWait: 'limbo · menunggu Jev…', tagRes: 'limbo', scenario: 'skenario',
+    legendTail: '· menunduk = tidak berhenti scroll', faces: ['marah', 'skeptis', 'cuek', 'setuju', 'antusias']
+  },
+  en: {
+    tagline: 'Indonesian netizen reaction simulator · personas judged by Jev (TypeSafe)', dark: 'Dark',
+    postLabel: 'Post under test', postPh: 'Paste a draft post, a headline, or an issue to test. Or upload an image of the post.',
+    upload: 'Upload post image', reading: 'Reading the image…', readDone: 'Text taken from the image; feel free to edit.',
+    platforms: 'Platforms (max 4)', messenger: 'Who posts it', messengerPh: 'optional, e.g. news account / brand',
+    pass: 'Access code', passPh: 'if required', run: 'Run simulation', sending: 'Sending…',
+    waiting: 'Jev is judging every persona… usually 1–3 minutes.', done: 'Done.', latest: 'Showing the latest simulation.',
+    pickPlatform: 'Pick at least one platform.', viewPlatform: 'View platform', reach: 'How far it spreads', ramai: 'buzz',
+    hintNiche: 'First circle only: people who already follow this topic. No influencers yet.',
+    hintRamai: 'Spreads to adjacent-interest feeds, influencers start to pick it up (30%).',
+    hintViral: 'The whole platform audience, influencers fully on board.',
+    posted: 'What gets posted', against: 'against', neutral: 'neutral', support: 'in favor',
+    stopped: 'stop scrolling', net: 'net sentiment (−2..+2)', virality: 'virality (0..3)',
+    anchor: 'Real-case anchor:', anchorLike: 'resembles', anchorN: 'real YouTube comments',
+    noAnchor: 'No real-case anchor', noAnchorTail: 'is close enough; the numbers above have no real-data reference (closest',
+    infl: 'Influencers who join if it spreads:', noInfl: 'Influencers: none care enough to weigh in.',
+    tokens: 'input tokens', cardEmpty: 'Click a character to see who they are and how they feel.',
+    noSim: 'No simulation for this persona yet.', stance: 'stance', ofReaders: 'of readers',
+    tagEmpty: 'limbo · no simulation yet', tagWait: 'limbo · waiting for Jev…', tagRes: 'limbo', scenario: 'scenario',
+    legendTail: '· head down = did not stop scrolling', faces: ['angry', 'skeptical', 'indifferent', 'agrees', 'excited']
+  }
+};
+let lang = 'id';
+try { lang = localStorage.getItem('netizen.lang') || 'id'; } catch (e) {}
+const T = k => I18N[lang][k];
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = T(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = T(el.dataset.i18nPh); });
+  document.getElementById('langLbl').textContent = lang === 'en' ? 'EN' : 'ID';
+  document.getElementById('langSw').checked = lang === 'en';
+  drawLegend(); renderCard(); render(); setStatus(statusKey);
+  if (!result) document.getElementById('tag').textContent = T('tagEmpty');
+}
+let statusKey = '';
+function setStatus(key) { statusKey = key; document.getElementById('status').textContent = key ? T(key) : ''; }
+
+// ---------- tema
+let theme = 'light';
+try { theme = localStorage.getItem('netizen.theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) {}
+function applyTheme() {
+  document.documentElement.dataset.theme = theme;
+  document.getElementById('themeSw').checked = theme === 'dark';
+}
+document.getElementById('themeSw').addEventListener('change', e => { theme = e.target.checked ? 'dark' : 'light'; try { localStorage.setItem('netizen.theme', theme); } catch (x) {} applyTheme(); });
+document.getElementById('langSw').addEventListener('change', e => { lang = e.target.checked ? 'en' : 'id'; try { localStorage.setItem('netizen.lang', lang); } catch (x) {} applyLang(); });
+
+// ---------- potongan visual (path SVG; kepala pusat 30,24 r21; badan pusat 30,56). Warna lewat var() supaya ikut tema.
+const INK = 'var(--ink)', PAPER = 'var(--paper)';
 const HAIR = {
   short: { d: 'M11 16 Q30 -4 49 16', fill: 'none' },
   styled: { d: 'M10 17 Q22 -9 50 13 Q44 9 38 12', fill: 'none' },
-  bob: { d: 'M9 26 Q9 1 30 1 Q51 1 51 26 L51 36 Q46 30 44 20 Q30 9 16 20 Q14 30 9 36 Z', fill: '#fff' },
-  long: { d: 'M9 26 Q9 1 30 1 Q51 1 51 26 L54 52 Q47 46 45 20 Q30 9 15 20 Q13 46 6 52 Z', fill: '#fff' },
-  bun: { d: 'M11 16 Q30 -2 49 16 M24 1 a6 6 0 1 0 12 0 a6 6 0 1 0 -12 0', fill: '#fff' },
-  hijab: { d: 'M30 -1 Q4 2 9 32 Q10 46 20 60 L40 60 Q50 46 51 32 Q56 2 30 -1 Z M30 7 Q13 9 15 28 Q17 44 30 46 Q43 44 45 28 Q47 9 30 7 Z', fill: '#fff' },
-  hood: { d: 'M30 -3 Q0 2 7 36 L11 60 L49 60 L53 36 Q60 2 30 -3 Z M30 9 Q16 11 17 28 Q19 42 30 44 Q41 42 43 28 Q44 11 30 9 Z', fill: '#fff' },
-  peci: { d: 'M13 14 L15 3 L45 3 L47 14 Z', fill: '#1a1a1a' },
-  helmet: { d: 'M8 22 Q8 -3 30 -3 Q52 -3 52 22 L52 27 L8 27 Z', fill: '#e5e7eb' },
+  bob: { d: 'M9 26 Q9 1 30 1 Q51 1 51 26 L51 36 Q46 30 44 20 Q30 9 16 20 Q14 30 9 36 Z', fill: PAPER },
+  long: { d: 'M9 26 Q9 1 30 1 Q51 1 51 26 L54 52 Q47 46 45 20 Q30 9 15 20 Q13 46 6 52 Z', fill: PAPER },
+  bun: { d: 'M11 16 Q30 -2 49 16 M24 1 a6 6 0 1 0 12 0 a6 6 0 1 0 -12 0', fill: PAPER },
+  hijab: { d: 'M30 -1 Q4 2 9 32 Q10 46 20 60 L40 60 Q50 46 51 32 Q56 2 30 -1 Z M30 7 Q13 9 15 28 Q17 44 30 46 Q43 44 45 28 Q47 9 30 7 Z', fill: PAPER },
+  hood: { d: 'M30 -3 Q0 2 7 36 L11 60 L49 60 L53 36 Q60 2 30 -3 Z M30 9 Q16 11 17 28 Q19 42 30 44 Q41 42 43 28 Q44 11 30 9 Z', fill: PAPER },
+  peci: { d: 'M13 14 L15 3 L45 3 L47 14 Z', fill: INK },
+  helmet: { d: 'M8 22 Q8 -3 30 -3 Q52 -3 52 22 L52 27 L8 27 Z', fill: 'var(--line)' },
   caping: { d: 'M-4 17 L30 -13 L64 17 Z', fill: '#fef3c7' },
-  cap: { d: 'M10 16 Q30 -6 50 16 Z M50 14 L63 18 L50 21', fill: '#fff' },
-  bald: { d: 'M9 20 q-3 8 2 14 M51 20 q3 8 -2 14', fill: 'none' },
-  mega: { d: 'M11 16 Q30 -4 49 16 M54 30 l12 -8 v22 l-12 -8 z', fill: '#fff' }
+  cap: { d: 'M10 16 Q30 -6 50 16 Z M50 14 L63 18 L50 21', fill: PAPER },
+  bald: { d: 'M9 20 q-3 8 2 14 M51 20 q3 8 -2 14', fill: 'none' }
 };
 const ACC = {
   none: { f: '', s: '', fill: 'none' },
   glasses: { f: 'M16 22 a6 5 0 1 0 12 0 a6 5 0 1 0 -12 0 M32 22 a6 5 0 1 0 12 0 a6 5 0 1 0 -12 0 M28 22 L32 22', s: 'M35 26 a6 5 0 1 0 12 0 a6 5 0 1 0 -12 0 M35 24 L12 20', fill: 'none' },
-  shades: { f: 'M15 19 h13 v7 h-13 z M32 19 h13 v7 h-13 z M28 22 h4', s: 'M34 22 h14 v7 h-14 z M34 24 L12 20', fill: '#1a1a1a' },
+  shades: { f: 'M15 19 h13 v7 h-13 z M32 19 h13 v7 h-13 z M28 22 h4', s: 'M34 22 h14 v7 h-14 z M34 24 L12 20', fill: INK },
   mustache: { f: 'M22 32 q8 -5 16 0', s: 'M42 34 q6 -3 9 1', fill: 'none' },
   lanyard: { f: 'M20 42 L28 60 M40 42 L32 60', s: 'M30 42 L34 60', fill: 'none' },
-  badge: { f: 'M38 57 h8 v6 h-8 z', s: 'M22 57 h8 v6 h-8 z', fill: '#1a1a1a' },
+  badge: { f: 'M38 57 h8 v6 h-8 z', s: 'M22 57 h8 v6 h-8 z', fill: INK },
   visor: { f: 'M8 24 L52 24', s: 'M8 24 L52 24', fill: 'none' }
 };
 const SKIRT = { none: '', long: 'M18 60 L11 80 L49 80 L42 60 Z', short: 'M19 60 L15 73 L45 73 L41 60 Z' };
@@ -150,17 +245,12 @@ const LOOK = {
 };
 const FALLBACK = [['short', 'none', 'none'], ['bob', 'none', 'short'], ['styled', 'glasses', 'none'], ['long', 'none', 'long'], ['cap', 'none', 'none'], ['bun', 'none', 'short']];
 const FACE = [
-  { fill: '#fdd3c2', brow: 'M21 -27 l6 3 M39 -27 l-6 3', mouth: 'M23 -10 q7 -6 14 0', name: 'marah' },
-  { fill: '#fde8dc', brow: 'M21 -26 l6 1 M33 -27 l6 -1', mouth: 'M23 -11 q7 -3 14 0', name: 'skeptis' },
-  { fill: '#f3f4f6', brow: '', mouth: 'M24 -11 l12 0', name: 'cuek' },
-  { fill: '#dbeafe', brow: '', mouth: 'M23 -13 q7 5 14 0', name: 'setuju' },
-  { fill: '#bfdbfe', brow: 'M19 -22 q6 -5 12 0 M29 -22 q6 -5 12 0', mouth: 'M22 -15 q8 8 16 0', name: 'antusias' }
+  { fill: '#fdd3c2', brow: 'M21 -27 l6 3 M39 -27 l-6 3', mouth: 'M23 -10 q7 -6 14 0' },
+  { fill: '#fde8dc', brow: 'M21 -26 l6 1 M33 -27 l6 -1', mouth: 'M23 -11 q7 -3 14 0' },
+  { fill: '#f3f4f6', brow: '', mouth: 'M24 -11 l12 0' },
+  { fill: '#dbeafe', brow: '', mouth: 'M23 -13 q7 5 14 0' },
+  { fill: '#bfdbfe', brow: 'M19 -22 q6 -5 12 0 M29 -22 q6 -5 12 0', mouth: 'M22 -15 q8 8 16 0' }
 ];
-const HINT = {
-  niche: 'Hanya lingkaran pertama: yang memang mengikuti topik ini. Influencer belum ikut.',
-  ramai: 'Menyebar ke feed yang berdekatan minatnya, influencer mulai ikut (30%).',
-  viral: 'Seluruh audiens platform, influencer ikut penuh.'
-};
 const PLATFORMS = ['Instagram', 'TikTok', 'Threads', 'X/Twitter', 'YouTube', 'Facebook'];
 
 function lookOf(id) {
@@ -169,6 +259,7 @@ function lookOf(id) {
   let h = 0; for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return FALLBACK[h % FALLBACK.length];
 }
+// wajah emoticon: selalu tinta gelap di atas isian pastel, apa pun temanya
 function faceSvg(lvl, r, x, y) {
   const f = FACE[lvl], s = r / 14;
   return `<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="${f.fill}" stroke="#1a1a1a" stroke-width="2"></circle>` +
@@ -179,36 +270,34 @@ function faceSvg(lvl, r, x, y) {
 function charSvg(c) {
   const [h, a, sk] = c.look, hair = HAIR[h], acc = ACC[a];
   const walking = c.pause <= 0, swing = walking ? Math.sin(c.phase) * 7 : 0, legA = 24 + swing, legB = 36 - swing;
-  const S = 'stroke="#1a1a1a" stroke-linecap="round" stroke-linejoin="round"';
+  const S = `stroke="${INK}" stroke-linecap="round" stroke-linejoin="round"`;
   let s = `<svg width="60" height="130" viewBox="0 -40 60 90" aria-hidden="true">
-    <ellipse cx="30" cy="88" rx="16" ry="4" fill="#1a1a1a" opacity=".1"></ellipse>
+    <ellipse cx="30" cy="88" rx="16" ry="4" fill="${INK}" opacity=".1"></ellipse>
     <line x1="24" y1="70" x2="${legA}" y2="86" ${S} stroke-width="2.2"></line><line x1="36" y1="70" x2="${legB}" y2="86" ${S} stroke-width="2.2"></line>
-    <ellipse cx="${legA}" cy="87" rx="5" ry="2.5" fill="#fff" ${S} stroke-width="2"></ellipse><ellipse cx="${legB}" cy="87" rx="5" ry="2.5" fill="#fff" ${S} stroke-width="2"></ellipse>
-    <ellipse cx="30" cy="56" rx="${walking ? 11 : 14}" ry="17" fill="#fff" ${S} stroke-width="2.2"></ellipse>
-    <path d="${SKIRT[sk]}" fill="#fff" ${S} stroke-width="2.2"></path>
-    <circle cx="30" cy="24" r="21" fill="#fff" ${S} stroke-width="2.2"></circle>
+    <ellipse cx="${legA}" cy="87" rx="5" ry="2.5" fill="${PAPER}" ${S} stroke-width="2"></ellipse><ellipse cx="${legB}" cy="87" rx="5" ry="2.5" fill="${PAPER}" ${S} stroke-width="2"></ellipse>
+    <ellipse cx="30" cy="56" rx="${walking ? 11 : 14}" ry="17" fill="${PAPER}" ${S} stroke-width="2.2"></ellipse>
+    <path d="${SKIRT[sk]}" fill="${PAPER}" ${S} stroke-width="2.2"></path>
+    <circle cx="30" cy="24" r="21" fill="${PAPER}" ${S} stroke-width="2.2"></circle>
     <path d="${hair.d}" fill="${hair.fill}" fill-rule="evenodd" ${S} stroke-width="2.2"></path>`;
   if (walking) {
-    s += `<circle cx="41" cy="26" r="1.8" fill="#1a1a1a"></circle><path d="M50 26 q5 3 1 7" fill="none" ${S} stroke-width="2"></path>
+    s += `<circle cx="41" cy="26" r="1.8" fill="${INK}"></circle><path d="M50 26 q5 3 1 7" fill="none" ${S} stroke-width="2"></path>
       <path d="${acc.s}" fill="${acc.fill}" ${S} stroke-width="1.8"></path>
-      <path d="M34 46 q10 -2 14 4" fill="none" ${S} stroke-width="2.2"></path><rect x="44" y="34" width="8" height="22" rx="2" fill="#fff" ${S} stroke-width="2.2"></rect>`;
+      <path d="M34 46 q10 -2 14 4" fill="none" ${S} stroke-width="2.2"></path><rect x="44" y="34" width="8" height="22" rx="2" fill="${PAPER}" ${S} stroke-width="2.2"></rect>`;
   } else {
     const ey = c.show ? 22 : 27;
-    s += `<circle cx="23" cy="${ey}" r="1.8" fill="#1a1a1a"></circle><circle cx="37" cy="${ey}" r="1.8" fill="#1a1a1a"></circle>
+    s += `<circle cx="23" cy="${ey}" r="1.8" fill="${INK}"></circle><circle cx="37" cy="${ey}" r="1.8" fill="${INK}"></circle>
       <path d="${acc.f}" fill="${acc.fill}" ${S} stroke-width="1.8"></path>
-      <rect x="23" y="34" width="14" height="22" rx="2.5" fill="#fff" ${S} stroke-width="2.2"></rect>
+      <rect x="23" y="34" width="14" height="22" rx="2.5" fill="${PAPER}" ${S} stroke-width="2.2"></rect>
       <path d="M16 46 q-6 4 -2 10 M44 46 q6 4 2 10" fill="none" ${S} stroke-width="2.2"></path>`;
     if (c.show && c.lvl != null) s += faceSvg(c.lvl, 14, 30, -18);
   }
   return s + '</svg>';
 }
 
-// ---------- limbo: karakter mondar-mandir di dalam elips
-const stage = document.getElementById('stage'), charsEl = document.getElementById('chars');
+// ---------- limbo: karakter mondar-mandir di dalam elips yang tergambar
+const stage = document.getElementById('stage'), charsEl = document.getElementById('chars'), floorSvg = stage.querySelector('svg.floor');
 let chars = [], selected = null;
-const floorSvg = stage.querySelector('svg.floor');
 function floor() {
-  // batas jalan karakter mengikuti elips yang tergambar (rx 380/880, ry 170/420 dari viewBox), sedikit di dalamnya
   const r = floorSvg.getBoundingClientRect(), s = stage.getBoundingClientRect();
   return { cx: r.left - s.left + r.width / 2, cy: r.top - s.top + r.height / 2, rx: r.width * 340 / 880, ry: r.height * 150 / 420 };
 }
@@ -217,12 +306,12 @@ function spot() {
   return { x: f.cx + f.rx * r * Math.cos(a), y: f.cy + f.ry * r * Math.sin(a) };
 }
 function setCast(list) {
-  // list: [{id,label,share,stop,net,desc}] ; share mengatur ukuran, stop peluang ekspresi muncul, net wajahnya
+  // list: [{id,label,share,stop,net}] ; share mengatur ukuran, stop peluang ekspresi muncul, net wajahnya
   const old = Object.fromEntries(chars.map(c => [c.id, c]));
   chars = list.map(p => {
     const prev = old[p.id], s = prev || spot();
     return Object.assign(prev || { x: s.x, y: s.y, tx: s.x, ty: s.y, dir: 1, pause: Math.random() * 60 | 0, show: false, phase: Math.random() * 6 },
-      { id: p.id, label: p.label, share: p.share, stop: p.stop, lvl: p.net == null ? null : Math.max(0, Math.min(4, Math.round(p.net) + 2)), net: p.net, desc: p.desc || '', look: lookOf(p.id) });
+      { id: p.id, label: p.label, share: p.share, stop: p.stop, lvl: p.net == null ? null : Math.max(0, Math.min(4, Math.round(p.net) + 2)), net: p.net, look: lookOf(p.id) });
   });
   charsEl.innerHTML = chars.map(c => `<button class="char" data-id="${c.id}" aria-label="${c.label}"><div></div></button>`).join('');
 }
@@ -245,18 +334,23 @@ function step() {
   });
 }
 setInterval(step, 50);
-charsEl.addEventListener('click', e => {
-  const b = e.target.closest('.char'); if (!b) return;
-  selected = selected === b.dataset.id ? null : b.dataset.id;
+function renderCard() {
   const c = chars.find(x => x.id === selected);
   document.getElementById('card').innerHTML = c
     ? `<div class="hand" style="font-size:22px;line-height:1.1">${c.label}</div>` +
-      (c.net == null ? '<div class="hint">Belum ada simulasi untuk persona ini.</div>'
-        : `<div style="color:#374151">${FACE[c.lvl].name} · sikap ${(c.net >= 0 ? '+' : '') + c.net.toFixed(2)}</div><div class="hint">berhenti scroll ${Math.round(c.stop * 100)}% · ${Math.round(c.share * 100)}% dari pembaca</div>`)
-    : '<span class="hint">Klik salah satu karakter untuk melihat siapa dia dan bagaimana sikapnya.</span>';
+      (c.net == null ? `<div class="hint">${T('noSim')}</div>`
+        : `<div>${T('faces')[c.lvl]} · ${T('stance')} ${(c.net >= 0 ? '+' : '') + c.net.toFixed(2)}</div><div class="hint">${T('stopped')} ${Math.round(c.stop * 100)}% · ${Math.round(c.share * 100)}% ${T('ofReaders')}</div>`)
+    : `<span class="hint">${T('cardEmpty')}</span>`;
+}
+charsEl.addEventListener('click', e => {
+  const b = e.target.closest('.char'); if (!b) return;
+  selected = selected === b.dataset.id ? null : b.dataset.id;
+  renderCard();
 });
-document.getElementById('legend').innerHTML = FACE.map((f, i) => `<div><svg width="26" height="26" viewBox="-14 -14 28 28" aria-hidden="true">${faceSvg(i, 12, 0, 0)}</svg><span>${f.name}</span></div>`).join('') +
-  '<span style="color:#9ca3af">· menunduk = tidak berhenti scroll</span>';
+function drawLegend() {
+  document.getElementById('legend').innerHTML = FACE.map((f, i) => `<div><svg width="26" height="26" viewBox="-14 -14 28 28" aria-hidden="true">${faceSvg(i, 12, 0, 0)}</svg><span>${T('faces')[i]}</span></div>`).join('') +
+    `<span>${T('legendTail')}</span>`;
+}
 
 // ---------- panel & API
 const $ = id => document.getElementById(id);
@@ -270,6 +364,7 @@ $('platforms').addEventListener('click', e => {
 });
 $('scenario').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; scenario = b.dataset.s; render(); });
 $('viewPlatforms').addEventListener('click', e => { const b = e.target.closest('.pill'); if (!b) return; viewPlatform = b.dataset.p; render(); });
+function showError(msg) { $('error').textContent = msg; $('error').classList.remove('hide'); }
 
 function pct(v) { return Math.round(v * 100); }
 function render() {
@@ -278,51 +373,67 @@ function render() {
   if (!pls.includes(viewPlatform)) viewPlatform = pls[0];
   $('viewPlatforms').innerHTML = pls.map(p => `<button class="pill ${p === viewPlatform ? 'on' : ''}" data-p="${p}">${p}</button>`).join('');
   for (const b of $('scenario').children) b.classList.toggle('on', b.dataset.s === scenario);
-  $('scenarioHint').textContent = HINT[scenario];
+  $('scenarioHint').textContent = T({ niche: 'hintNiche', ramai: 'hintRamai', viral: 'hintViral' }[scenario]);
   const pl = result.platforms[viewPlatform], sc = pl.scenarios[scenario], v = sc.vocal;
-  $('tag').textContent = `limbo · ${viewPlatform} · skenario ${scenario}`;
+  $('tag').textContent = `${T('tagRes')} · ${viewPlatform} · ${T('scenario')} ${scenario === 'ramai' ? T('ramai') : scenario}`;
   $('bNeg').style.width = pct(v.negative) + '%'; $('bNeu').style.width = pct(v.neutral) + '%'; $('bPos').style.width = pct(v.positive) + '%';
-  $('tNeg').textContent = pct(v.negative) + '% menentang'; $('tNeu').textContent = pct(v.neutral) + '% netral'; $('tPos').textContent = pct(v.positive) + '% mendukung';
+  $('tNeg').textContent = `${pct(v.negative)}% ${T('against')}`; $('tNeu').textContent = `${pct(v.neutral)}% ${T('neutral')}`; $('tPos').textContent = `${pct(v.positive)}% ${T('support')}`;
   $('sReach').textContent = pct(sc.reach) + '%'; $('sNet').textContent = (sc.net >= 0 ? '+' : '') + sc.net.toFixed(2); $('sVir').textContent = pl.virality.toFixed(1);
-  const a = result.anchors[0];
+  const a = result.anchors[0], name = a ? a.id.replace(/^[a-z]\d+_/, '') : '-';
   $('anchors').innerHTML = a && a.similarity >= 2.5
-    ? `<b>Jangkar kasus nyata:</b> mirip <b>${a.id.replace(/^[a-z]\d+_/, '')}</b> (${a.similarity.toFixed(1)}/4, ${a.n} komentar YouTube asli): ${pct(a.mix.negative)}% menentang · ${pct(a.mix.neutral)}% netral · ${pct(a.mix.positive)}% mendukung.`
-    : `<b>Tidak ada jangkar kasus nyata</b> yang cukup mirip (terdekat ${a ? a.id.replace(/^[a-z]\d+_/, '') + ' ' + a.similarity.toFixed(1) + '/4' : '-'}); angka di atas tanpa pembanding data asli.`;
+    ? `<b>${T('anchor')}</b> ${T('anchorLike')} <b>${name}</b> (${a.similarity.toFixed(1)}/4, ${a.n} ${T('anchorN')}): ${pct(a.mix.negative)}% ${T('against')} · ${pct(a.mix.neutral)}% ${T('neutral')} · ${pct(a.mix.positive)}% ${T('support')}.`
+    : `<b>${T('noAnchor')}</b> ${T('noAnchorTail')} ${name} ${a ? a.similarity.toFixed(1) : '-'}/4).`;
   $('influencers').innerHTML = pl.influencers.length
-    ? '<b>Influencer yang ikut kalau menyebar:</b> ' + pl.influencers.map(i => `${i.label.split(' (')[0]} <span class="hint">[${i.take} ${pct(i.p)}%]</span>`).join(', ')
-    : '<b>Influencer:</b> tidak ada yang cukup tertarik untuk ikut membahas.';
-  $('cost').textContent = `${result.tokens.toLocaleString('id-ID')} token input ≈ $${(result.tokens * 0.042 / 1e6).toFixed(3)}`;
+    ? `<b>${T('infl')}</b> ` + pl.influencers.map(i => `${i.label.split(' (')[0]} <span class="hint">[${i.take} ${pct(i.p)}%]</span>`).join(', ')
+    : `<b>${T('noInfl')}</b>`;
+  $('cost').textContent = `${result.tokens.toLocaleString(lang === 'en' ? 'en-US' : 'id-ID')} ${T('tokens')} ≈ $${(result.tokens * 0.042 / 1e6).toFixed(3)}`;
   setCast(sc.personas.filter(p => p.share >= 0.004));
   $('result').classList.remove('hide');
 }
 
 async function poll(id) {
   const r = await fetch('api/run/' + id).then(r => r.json());
-  if (r.status === 'running') { $('status').textContent = 'Jev sedang menilai tiap persona… biasanya 1–3 menit.'; return setTimeout(() => poll(id), 3000); }
+  if (r.status === 'running') { setStatus('waiting'); return setTimeout(() => poll(id), 3000); }
   $('go').disabled = false;
-  if (r.status === 'error') { $('status').textContent = ''; $('error').textContent = r.error; $('error').classList.remove('hide'); return; }
-  result = r.result; $('status').textContent = 'Selesai.'; render();
+  if (r.status === 'error') { setStatus(''); showError(r.error); return; }
+  result = r.result; setStatus('done'); render();
 }
 $('go').addEventListener('click', async () => {
   $('error').classList.add('hide');
   const body = { text: $('text').value, platforms: PLATFORMS.filter(p => chosen.has(p)), messenger: $('messenger').value, pass: $('pass').value };
-  if (!body.platforms.length) { $('error').textContent = 'Pilih minimal satu platform.'; $('error').classList.remove('hide'); return; }
-  $('go').disabled = true; $('status').textContent = 'Mengirim…';
+  if (!body.platforms.length) return showError(T('pickPlatform'));
+  $('go').disabled = true; setStatus('sending');
   const r = await fetch('api/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const j = await r.json();
-  if (!r.ok) { $('go').disabled = false; $('status').textContent = ''; $('error').textContent = j.error || r.statusText; $('error').classList.remove('hide'); return; }
-  $('tag').textContent = 'limbo · menunggu Jev…';
+  if (!r.ok) { $('go').disabled = false; setStatus(''); return showError(j.error || r.statusText); }
+  $('tag').textContent = T('tagWait');
   setCast(chars.map(c => ({ id: c.id, label: c.label, share: c.share, stop: 0, net: null })));
   poll(j.id);
 });
 
-// awal: persona umum berkeliaran tanpa ekspresi, lalu hasil terakhir kalau ada
+// gambar post -> teks (server memanggil Claude), lalu masuk ke textarea untuk diedit
+$('file').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  $('error').classList.add('hide'); $('uplStatus').textContent = T('reading');
+  const dataUrl = await new Promise((ok, no) => { const rd = new FileReader(); rd.onload = () => ok(rd.result); rd.onerror = no; rd.readAsDataURL(f); });
+  $('thumb').src = dataUrl; $('thumb').classList.remove('hide');
+  const r = await fetch('api/describe', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image: dataUrl.split(',')[1], media_type: f.type, pass: $('pass').value }) });
+  const j = await r.json();
+  $('uplStatus').textContent = '';
+  if (!r.ok) return showError(j.error || r.statusText);
+  $('text').value = j.text; $('uplStatus').textContent = T('readDone');
+  e.target.value = '';
+});
+
+// awal: tema dan bahasa tersimpan, persona umum berkeliaran tanpa ekspresi, lalu hasil terakhir kalau ada
+applyTheme(); applyLang();
 fetch('api/personas').then(r => r.json()).then(ps => {
   if (!result) setCast(ps.map(p => ({ id: p.id, label: p.label, share: 0.06, stop: 0, net: null })));
 }).catch(() => {});
 fetch('api/latest').then(r => r.ok ? r.json() : null).then(j => {
   if (!j) return;
-  result = j; $('text').value = j.text; $('status').textContent = 'Menampilkan simulasi terakhir.'; render();
+  result = j; setStatus('latest'); render();
 }).catch(() => {});
 </script>
 </body>
