@@ -102,7 +102,8 @@ async def retrieve(client, post, cases: list[dict]) -> tuple[list[tuple[float, d
     return sorted(((r.answers[c["id"]].score, c) for c in cases), key=lambda x: -x[0]), r.usage.input_tokens
 
 
-async def audience_fit(client, post, target: str, people: list[dict], messenger: str = "", earlier=None) -> tuple[dict[str, float], int]:
+async def audience_fit(client, post, target: str, people: list[dict], messenger: str = "", earlier=None,
+                       context: str = "") -> tuple[dict[str, float], int]:
     state = {"post": post, "people": {p["id"]: public(p, SIM_FIELDS) for p in people}}
     who = "the people who follow this kind of account or topic, or search for it"
     if earlier:
@@ -114,6 +115,9 @@ async def audience_fit(client, post, target: str, people: list[dict], messenger:
     if target:
         state["target_audience"] = target
         who += ", or the brand's intended target audience in `target_audience`"
+    if context:
+        state["context"] = context
+        who += ", or people already following the issue described in `context`"
     qs = {p["id"]: Score(instructions=f"`post` is published on Indonesian social media and first reaches {who}. "
                                       f"How likely is the Indonesian netizen described in `people.{p['id']}` to be in "
                                       f"that first audience?", criteria=FIT)
@@ -154,10 +158,12 @@ IMAGE_HEADERS = {"TypeSafe-Danger-Zone-Images": "true"}   # the client needs thi
 
 
 async def run(client, text: str, subject: str = "", target: str = "", messenger: str = "",
-              platforms=PLATFORMS[:4], run_id: str = "issue", image_b64: str = "", earlier: dict | None = None) -> dict:
+              platforms=PLATFORMS[:4], run_id: str = "issue", image_b64: str = "", earlier: dict | None = None,
+              context: str = "") -> dict:
     """The whole workflow for one post; the CLI report and the web server both read the returned dict.
     image_b64: the post as an image (png/jpg), with `text` as its caption if any. earlier: per platform, the
-    account's previous episodes [{"text", "reaction"}] that the personas remember."""
+    account's previous episodes [{"text", "reaction"}] that the personas remember. context: what the public already
+    knows and feels about the issue when the post appears (a few sentences)."""
     general = json.loads((ROOT / "personas.json").read_text(encoding="utf-8"))
     fams = segment_families()
     members = [m for fam in fams.values() for m in fam]
@@ -170,23 +176,24 @@ async def run(client, text: str, subject: str = "", target: str = "", messenger:
     any_earlier = next((e for e in earlier.values() if e), None)
     (ranked, t_ret), (fit, t_fit) = await asyncio.gather(
         retrieve(client, post_value, library()),
-        audience_fit(client, post_value, target, general + members, messenger, any_earlier))
+        audience_fit(client, post_value, target, general + members, messenger, any_earlier, context))
     best = {sid: max(fit[m["id"]] for m in fam) for sid, fam in fams.items()}
     chosen_ids = sorted((sid for sid in fams if best[sid] >= SEGMENT_MIN_FIT), key=lambda sid: -best[sid])[:MAX_SEGMENTS]
     personas = general + [m for sid in chosen_ids for m in fams[sid]]
     posts = [{"id": f"{run_id}_{p.split('/')[0].lower()}", "platform": p, "post": post_value,
               **({"subject": subject} if subject else {}),
               **({"messenger": messenger} if messenger else {}),
-              **({"earlier": earlier[p]} if earlier.get(p) else {})} for p in platforms]
+              **({"earlier": earlier[p]} if earlier.get(p) else {}),
+              **({"context": context} if context else {})} for p in platforms]
     sims = await asyncio.gather(*(simulate(client, p, personas, influencers) for p in posts))
-    return {"text": text or "[gambar]", "subject": subject, "target": target, "messenger": messenger, "general": general, "fams": fams,
+    return {"text": text or "[gambar]", "subject": subject, "target": target, "messenger": messenger, "context": context, "general": general, "fams": fams,
             "influencers": influencers, "ranked": ranked, "fit": fit, "best": best, "chosen_ids": chosen_ids,
             "personas": personas, "posts": posts, "sims": sims, "tokens": t_ret + t_fit + sum(t for *_, t in sims)}
 
 
 def web_view(r: dict) -> dict:
     """What the web page draws: per platform and reach scenario, each persona's stop chance, stance and share of readers."""
-    out = {"text": r["text"], "tokens": r["tokens"], "segments": r["chosen_ids"],
+    out = {"text": r["text"], "context": r.get("context", ""), "tokens": r["tokens"], "segments": r["chosen_ids"],
            "anchors": [{"id": c["id"], "similarity": s, "mix": c["mix"], "n": c["n"]} for s, c in r["ranked"][:3]],
            "platforms": {}}
     for post, (r1, posted, r2s, _) in zip(r["posts"], r["sims"]):
@@ -207,7 +214,7 @@ def web_view(r: dict) -> dict:
 def save(r: dict, run_id: str) -> Path:
     out = ROOT / "results" / f"issue_{run_id}_{datetime.now():%Y%m%d_%H%M%S}.json"
     out.parent.mkdir(exist_ok=True)
-    out.write_text(json.dumps({"text": r["text"], "subject": r["subject"], "target": r["target"],
+    out.write_text(json.dumps({"text": r["text"], "subject": r["subject"], "target": r["target"], "context": r.get("context", ""),
                                "retrieval": [{"id": c["id"], "similarity": s} for s, c in r["ranked"]],
                                "fit": r["fit"], "segments": r["chosen_ids"],
                                "runs": [{"post": {**post, "post": post["post"] if isinstance(post["post"], str) else "[gambar]"},

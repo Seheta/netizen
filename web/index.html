@@ -116,6 +116,11 @@
       </div>
     </div>
     <div>
+      <label class="k" for="context" data-i18n="context"></label>
+      <textarea id="context" style="min-height:64px" data-i18n-ph="contextPh"></textarea>
+      <div class="hint" data-i18n="contextHint"></div>
+    </div>
+    <div>
       <span class="k" data-i18n="platforms"></span>
       <div class="row" id="platforms"></div>
     </div>
@@ -190,7 +195,10 @@ const I18N = {
     tagEmpty: 'limbo · belum ada simulasi', tagWait: 'limbo · menunggu Jev…', tagRes: 'limbo', scenario: 'skenario', episode: 'episode',
     legendTail: '· menunduk = tidak berhenti scroll', faces: ['marah', 'skeptis', 'cuek', 'setuju', 'antusias'], imagePost: '[post gambar]',
     samples: 'Contoh simulasi', samplesHint: 'Lima akun fiktif, isu nyata. Hasil rekaman run asli, bisa dilihat tanpa API key.',
-    sampleTag: 'contoh · rekaman', samplePost: 'Post contoh', sampleLoadFail: 'Contoh belum tersedia.'
+    sampleTag: 'contoh · rekaman', samplePost: 'Post contoh', sampleLoadFail: 'Contoh belum tersedia.',
+    context: 'Konteks isu (opsional)', contextLbl: 'Konteks',
+    contextPh: 'Apa yang netizen sudah tahu dan rasakan soal isu ini sekarang: kejadian, angka, narasi yang dominan. 2 sampai 4 kalimat.',
+    contextHint: 'Tanpa ini persona hanya menilai dari teks post dan pengetahuan umum. Di backtest, konteks memotong selisih dengan komentar asli sampai separuh.'
   },
   en: {
     tagline: 'Indonesian netizen reaction simulator · personas judged by Jev (TypeSafe)', dark: 'Dark',
@@ -218,7 +226,10 @@ const I18N = {
     tagEmpty: 'limbo · no simulation yet', tagWait: 'limbo · waiting for Jev…', tagRes: 'limbo', scenario: 'scenario', episode: 'episode',
     legendTail: '· head down = did not stop scrolling', faces: ['angry', 'skeptical', 'indifferent', 'agrees', 'excited'], imagePost: '[image post]',
     samples: 'Sample runs', samplesHint: 'Five fictional accounts, real issues. Recorded real runs, viewable without an API key.',
-    sampleTag: 'sample · recorded', samplePost: 'Sample post', sampleLoadFail: 'Sample not available yet.'
+    sampleTag: 'sample · recorded', samplePost: 'Sample post', sampleLoadFail: 'Sample not available yet.',
+    context: 'Issue context (optional)', contextLbl: 'Context',
+    contextPh: 'What netizens already know and feel about this issue right now: events, numbers, the dominant narrative. 2 to 4 sentences.',
+    contextHint: 'Without it, personas judge from the post text and general knowledge only. In backtests, context cut the gap to real comments by up to half.'
   }
 };
 let lang = 'id';
@@ -484,7 +495,7 @@ function renderTimeline() {
   $('timeline').innerHTML = chain.map((n, i) => chip(n, `${i + 1} · ${title(n).slice(0, 18)}${title(n).length > 18 ? '…' : ''}`, n.id === current ? 'on' : '')).join('') +
     kids.map(n => chip(n, `↳ ${title(n).slice(0, 18)}${title(n).length > 18 ? '…' : ''}`, 'branch')).join('');
   const cur = node(current), info = $('sampleInfo');
-  if (cur && cur.sample) { info.classList.remove('hide'); info.innerHTML = `<b>${T('samplePost')}</b> · ${esc(cur.sample.account)} · ${esc(cur.sample.kind)} · ${esc(cur.sample.recorded)}<br>${esc(cur.text)}` + (cur.sample.subject ? `<br><span class="hint">${T('stance')}: ${esc(cur.sample.subject)}</span>` : ''); }
+  if (cur && cur.sample) { info.classList.remove('hide'); info.innerHTML = `<b>${T('samplePost')}</b> · ${esc(cur.sample.account)} · ${esc(cur.sample.kind)} · ${esc(cur.sample.recorded)}<br>${esc(cur.text)}` + (cur.sample.subject ? `<br><span class="hint">${T('stance')}: ${esc(cur.sample.subject)}</span>` : '') + (cur.result && cur.result.context ? `<br><span class="hint">${T('contextLbl')}: ${esc(cur.result.context)}</span>` : ''); }
   else info.classList.add('hide');
 }
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -540,7 +551,7 @@ $('go').addEventListener('click', async () => {
   if (!key) return showError(T('needKey'));
   if (!text && !imageB64) return showError(T('needPost'));
   if (!platforms.length) return showError(T('pickPlatform'));
-  const body = { key, text, image: imageB64, platforms, messenger: $('messenger').value };
+  const body = { key, text, image: imageB64, platforms, messenger: $('messenger').value, context: $('context').value.trim() };
   if (followFrom) body.earlier = earlierFor(followFrom, platforms);
   $('go').disabled = true; setStatus('sending');
   const r = await fetch('api/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });

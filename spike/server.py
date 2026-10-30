@@ -8,7 +8,7 @@ Jalankan dari folder netizen:  uv run spike/server.py     lalu buka http://local
 GET  /api/personas                  -> persona umum (id, label)
 POST /api/run                       -> {"id"}   body:
      {"key": <TypeSafe API key pengguna, wajib>, "text"?, "image"?: <png/jpg base64>, "platforms"?,
-      "subject"?, "messenger"?, "target"?, "earlier"?: {platform: [{"text","reaction"}]}}
+      "subject"?, "messenger"?, "target"?, "earlier"?: {platform: [{"text","reaction"}]}, "context"?}
      text atau image harus ada. earlier = episode sebelumnya dari akun yang sama (follow-up post).
 GET  /api/run/<id>                  -> {"status": running|done|error, "result"?, "error"?}
 Key pengguna dipakai sekali untuk request itu dan tidak disimpan; server tidak punya key sendiri.
@@ -42,7 +42,7 @@ def worker(job_id: str, req: dict) -> None:
     async def go():
         async with AsyncTypeSafeClient(api_key=req["key"], headers=IMAGE_HEADERS if req["image"] else None) as client:
             r = await run(client, req["text"], req["subject"], req["target"], req["messenger"], req["platforms"], job_id,
-                          image_b64=req["image"], earlier=req["earlier"])
+                          image_b64=req["image"], earlier=req["earlier"], context=req["context"])
         save(r, job_id)
         return web_view(r)
     try:
@@ -79,6 +79,7 @@ def validate(body: dict) -> dict | str:
         clean[pl] = [{"text": str(e.get("text", ""))[:1000], "reaction": str(e.get("reaction", ""))[:600]}
                      for e in eps if isinstance(e, dict)]
     extra = {k: str(body.get(k, ""))[:200].strip() for k in ("subject", "messenger", "target")}
+    extra["context"] = str(body.get("context", ""))[:1500].strip()
     return {"key": key, "text": text, "image": image, "platforms": platforms, "earlier": clean, **extra}
 
 

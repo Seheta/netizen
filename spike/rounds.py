@@ -29,7 +29,7 @@ from typesafe_sdk import AsyncTypeSafeClient, Choice, Score
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from spike import (  # noqa: E402
-    ACTIONS, EARLIER, POST_QUESTIONS, PRICE_PER_MTOK, SIM_FIELDS, STANCE_LEVELS, VOCAL,
+    ACTIONS, POST_QUESTIONS, PRICE_PER_MTOK, SIM_FIELDS, STANCE_LEVELS, VOCAL, prefix,
     audience_weight, bucket, load_env, persona_questions, tone_of, kind_probs, comment_question, position_question, GENERIC_SUBJECT,
 )
 
@@ -64,7 +64,7 @@ def about(post: dict) -> str:
 
 def influencer_questions(iid: str, post: dict) -> dict:
     i = f"`influencers.{iid}`"
-    ctx = EARLIER if post.get("earlier") else ""
+    ctx = prefix(bool(post.get("earlier")), bool(post.get("context")))
     return {
         f"{iid}__take": Choice(
             instructions=(
@@ -94,7 +94,7 @@ SHIFT_LEVELS = [
 
 def round2_questions(pid: str, post: dict) -> dict:
     p = f"`personas.{pid}`"
-    ctx = EARLIER if post.get("earlier") else ""
+    ctx = prefix(bool(post.get("earlier")), bool(post.get("context")))
     return {
         f"{pid}__shift": Score(
             instructions=(
@@ -113,7 +113,7 @@ def round2_questions(pid: str, post: dict) -> dict:
             ),
             criteria=ACTIONS,
         ),
-        f"{pid}__comment": comment_question(p, about(post), bool(post.get("messenger")), bool(post.get("earlier"))),
+        f"{pid}__comment": comment_question(p, about(post), bool(post.get("messenger")), bool(post.get("earlier")), bool(post.get("context"))),
     }
 
 
@@ -148,10 +148,10 @@ def merge(responses: list[dict]) -> dict:
 
 async def round1(client, post: dict, personas: list[dict], influencers: list[dict]) -> dict:
     base = {"platform": post["platform"], "post": post["post"]}
-    for k in ("messenger", "earlier"):
+    for k in ("messenger", "earlier", "context"):
         if post.get(k):
             base[k] = post[k]
-    flags = (post.get("subject", ""), bool(post.get("messenger")), bool(post.get("earlier")))
+    flags = (post.get("subject", ""), bool(post.get("messenger")), bool(post.get("earlier")), bool(post.get("context")))
     jobs = [ask(client, {**base, "influencers": {i["id"]: public(i, INFLUENCER_SIM_FIELDS) for i in influencers}},
                 {**POST_QUESTIONS, "post__position": position_question(about(post)), **{k: v for i in influencers for k, v in influencer_questions(i["id"], post).items()}})]
     for start in range(0, len(personas), CHUNK):
@@ -166,7 +166,7 @@ async def round2(client, post: dict, personas: list[dict], inf: dict, take: str,
     a1 = r1["answers"]
     base = {"platform": post["platform"], "post": post["post"], "influencer": public(inf, INFLUENCER_SIM_FIELDS),
             "influencer_take": take}
-    for k in ("messenger", "earlier"):
+    for k in ("messenger", "earlier", "context"):
         if post.get(k):
             base[k] = post[k]
     jobs = []

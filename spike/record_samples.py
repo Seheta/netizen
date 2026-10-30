@@ -23,33 +23,46 @@ from spike import load_env  # noqa: E402
 
 OUT = Path(__file__).resolve().parent.parent / "web" / "samples"
 
-# Akun fiktif, isu nyata. `follow` = episode kedua dari akun yang sama.
+KARHUTLA = ('Forest and peat fires (karhutla) have burned since July 2026 (about 95,000 hectares in July alone); Kalimantan and '
+            'Sumatra have breathed toxic haze for four months, worst on 13-15 October, with schools closed and ojol and street '
+            'vendors losing income. Malaysia and Singapore protested the cross-border haze, a class action is being prepared, '
+            'and NGOs, clerics and regional leaders demand national-disaster status, which the government has not granted. '
+            "President Prabowo said he hoped for rain, which netizens mocked ('then what is the government for?'); a governor "
+            'went viral having a lavish breakfast abroad during the haze, and influencers complained Instagram throttled their '
+            'karhutla posts. The dominant narrative: the government lets corporate land burn and understates the crisis.')
+
+# Akun fiktif, isu nyata (Agustus-Oktober 2026); `context` = suasana publik saat itu. `follow` = episode kedua dari akun yang sama.
 SAMPLES = [
-    {"id": "kementerian", "kind": "pemerintah · defensif",
+    {"id": "karhutla", "kind": "pemerintah · defensif",
      "account": "Akun resmi sebuah kementerian", "messenger": "the official account of an Indonesian government ministry",
-     "subject": "Tapera (the plan to deduct 3% of salaries for a public housing savings scheme)",
-     "text": "Tapera bukan potongan baru. Ini tabungan Anda sendiri dan bisa dicairkan saat pensiun. Mohon pelajari dulu aturannya sebelum berkomentar. #TaperaUntukRakyat",
+     "subject": "the government's handling of the 2026 forest and peat fires (karhutla) and the haze",
+     "context": KARHUTLA,
+     "text": "Titik api turun 60% dalam sepekan. Satgas bekerja 24 jam, sisa 639 hektare sedang ditangani. Kabut asap lintas batas bukan hanya dari Indonesia. Mohon tidak menyebarkan foto lama dan hoaks. #SiagaKarhutla",
      "platforms": ["X/Twitter", "Instagram"],
-     "follow": "Kami mendengar keberatan Anda. Skema Tapera akan dikaji ulang bersama serikat pekerja dan pengusaha, dan tidak ada potongan gaji sebelum aturan turunannya disepakati bersama."},
+     "follow": "Kami minta maaf kepada warga yang empat bulan menghirup asap. Status bencana nasional sedang dikaji bersama BNPB. Masker, oksigen, dan sekolah daring diperluas, dan data titik api harian kami buka untuk publik mulai hari ini."},
     {"id": "langkah", "kind": "brand · campaign baru",
      "account": "Langkah, sepatu lokal", "messenger": "Langkah, an Indonesian local sneaker brand from Bandung with a young middle-class following",
      "subject": "",
-     "text": "Langkah resmi tampil di Paris Fashion Week 2026. Dari Bandung untuk dunia. Koleksi runway rilis 1 November, harga mulai Rp1,9 juta.",
+     "context": "Indonesia won the inaugural FIFA ASEAN Cup on 5 October 2026, beating Thailand on penalties at Gelora Bung Karno; the euphoria is huge. But grooming brand Kahf's 'Hati-Hati Beda Level' meme, with the Indonesian flag above its neighbours, triggered boycott calls in Malaysia against Indonesian brands and a public apology, so chest-beating marketing is under scrutiny. Netizens of Indonesia and Malaysia are still trading insults on Threads.",
+     "text": "Langkah x Timnas: edisi JUARA ASEAN. 2.026 pasang, bernomor, merah-putih di sol. Rilis Jumat 10.00 WIB, Rp1,2 juta. Untuk yang percaya sejak babak grup.",
      "platforms": ["Instagram", "TikTok"]},
     {"id": "kopisenja", "kind": "brand · isu nasional",
      "account": "Kopi Senja, jaringan kedai kopi", "messenger": "Kopi Senja, an Indonesian local coffee chain's official account",
-     "subject": "the brand's refusal to take a side on the boycott of products linked to Israel",
-     "text": "Kami tidak berpolitik. Kopi Senja hanya ingin jualan kopi yang enak untuk semua orang, apa pun pandangannya. Mohon jangan seret kami ke urusan boikot.",
+     "subject": "the Indonesia Sadar student protests against the government's two-year record",
+     "context": "On 28 October 2026 (Youth Pledge Day) BEM UI and the Komite Sadar alliance held the 'Indonesia Sadar' protest at Bundaran HI, marking two years of the Prabowo-Gibran government with five demands (cheaper education, karhutla, democracy, the economy) under the slogan 'Tepati atau Pergi'. Clashes with police left students fainting; pro-government accounts call the protesters NGO puppets, while much of the public sympathises. Brands have so far stayed silent.",
+     "text": "Gerai Kopi Senja Sarinah dan Thamrin buka sampai tengah malam untuk siapa pun yang butuh duduk, air putih, dan colokan. Mahasiswa, wartawan, petugas. Kami tidak berpihak pada partai; kami berpihak pada orang yang berdiri di jalan untuk negerinya. #IndonesiaSadar",
      "platforms": ["X/Twitter", "TikTok"]},
     {"id": "raraglow", "kind": "influencer · di luar niche",
      "account": "@rara.glow, influencer skincare", "messenger": "@rara.glow, a skincare and beauty influencer with 300 thousand followers, mostly women aged 18 to 25",
-     "subject": "the influencer's promotion of a paid trading class that promises 20% gains in three days",
-     "text": "Jujur aku nyesel baru tahu sekarang. Ikut kelas trading 3 hari langsung cuan 20%. Link di bio, kuota terbatas ya bestie.",
+     "subject": "the influencer's dismissal of the karhutla haze as normal",
+     "context": KARHUTLA + " Netizens have just punished influencers seen as tone-deaf: Vilmei's 'Day 1 Cari Kerja' job-hunt parody and Irenna Kristyn's mockery of cost-of-living protests both drew mass criticism and forced apologies in October.",
+     "text": "Guys, asap di Kalimantan itu tiap tahun ada, jangan lebay dong. Yang penting kulit tetap aman: double cleanse, SPF 50, dan serum antioksidan. Link produk di bio, diskon sampai Minggu.",
      "platforms": ["Instagram", "TikTok"]},
-    {"id": "karyawan", "kind": "akun biasa · berpotensi viral",
-     "account": "Akun pribadi, pekerja kantoran", "messenger": "an ordinary personal account of an office worker with about 400 followers",
-     "subject": "unpaid overtime demanded by an employer in the name of loyalty",
-     "text": "Gaji UMR, disuruh lembur sampai jam 10 malam tanpa uang lembur. Pas protes, HRD bilang \"ini soal loyalitas\". Loyalitas kok cuma satu arah.",
+    {"id": "asn", "kind": "akun biasa · berpotensi viral",
+     "account": "Akun pribadi, pegawai negeri", "messenger": "an ordinary personal account of a junior civil servant with about 500 followers",
+     "subject": "government offices ordering staff to post the #2TahunGerakNyata campaign from personal accounts",
+     "context": "A letter from the presidential communications office (Bakom RI, 12 October 2026) and a follow-up from the Ministry of Immigration and Corrections (13 October) leaked, instructing all units to post about the government's two-year achievements on 13-20 October with mandatory phrases ('2 Tahun Gerak Nyata', 'Transformasi Bangsa') and the hashtag #2TahunGerakNyata. Netizens call it 'buzzer berseragam' (uniformed buzzers), especially while prison scandals remain unresolved; the government says it is normal public communication.",
+     "text": "Saya PNS golongan III. Hari ini kami diwajibkan posting #2TahunGerakNyata dari akun pribadi, lengkap dengan kalimat yang sudah ditentukan. Ini akun saya, bukan akun kantor. Saya posting ini saja.",
      "platforms": ["X/Twitter", "Threads"]},
 ]
 
@@ -66,13 +79,13 @@ def reaction(view: dict, pl: str) -> str:
 
 
 async def record(client, s: dict) -> dict:
-    r = await run(client, s["text"], s["subject"], "", s["messenger"], s["platforms"], f"sample_{s['id']}")
+    r = await run(client, s["text"], s["subject"], "", s["messenger"], s["platforms"], f"sample_{s['id']}", context=s.get("context", ""))
     save(r, f"sample_{s['id']}")
     out = {"id": s["id"], "kind": s["kind"], "account": s["account"], "subject": s["subject"], "recorded": date.today().isoformat(),
            "episodes": [{"text": s["text"], "result": web_view(r)}]}
     if s.get("follow"):
         earlier = {pl: [{"text": s["text"], "reaction": reaction(out["episodes"][0]["result"], pl)}] for pl in s["platforms"]}
-        r2 = await run(client, s["follow"], s["subject"], "", s["messenger"], s["platforms"], f"sample_{s['id']}_2", earlier=earlier)
+        r2 = await run(client, s["follow"], s["subject"], "", s["messenger"], s["platforms"], f"sample_{s['id']}_2", earlier=earlier, context=s.get("context", ""))
         save(r2, f"sample_{s['id']}_2")
         out["episodes"].append({"text": s["follow"], "result": web_view(r2)})
     return out
