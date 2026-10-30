@@ -1,4 +1,23 @@
-# netizen
+<div align="center">
+
+<img src="docs/header.webp" alt="netizen: simulate online reactions" width="820">
+
+### Simulasi reaksi netizen Indonesia terhadap sebuah post, sebelum post-nya tayang
+
+<a href="https://moddestlab.com/netizen/"><img src="https://img.shields.io/badge/DEMO-moddestlab.com%2Fnetizen-E8580C?style=for-the-badge" alt="Demo"></a>
+<a href="https://docs.typesafe.ai"><img src="https://img.shields.io/badge/MODEL-TypeSafe%20Jev-111111?style=for-the-badge" alt="TypeSafe Jev"></a>
+<a href="https://moddestlab.com"><img src="https://img.shields.io/badge/BY-Moddest%20Lab-ffffff?style=for-the-badge&labelColor=111111" alt="Moddest Lab"></a>
+
+<img src="https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white" alt="Python 3.11+">
+<img src="https://img.shields.io/badge/runner-uv-DE5FE9?logo=astral&logoColor=white" alt="uv">
+<img src="https://img.shields.io/badge/frontend-vanilla%20HTML%2FJS-f7df1e" alt="vanilla HTML/JS">
+<img src="https://img.shields.io/badge/API%20key-bring%20your%20own-2ea043" alt="bring your own key">
+<a href="https://github.com/Seheta/netizen/stargazers"><img src="https://img.shields.io/github/stars/Seheta/netizen?style=flat&color=yellow" alt="stars"></a>
+<a href="https://github.com/Seheta/netizen/commits/main"><img src="https://img.shields.io/github/last-commit/Seheta/netizen" alt="last commit"></a>
+
+[Alur](#alur) · [Menjalankan](#menjalankan) · [Status](#status) · [Demo](https://moddestlab.com/netizen/)
+
+</div>
 
 Simulasi reaksi netizen Indonesia terhadap sebuah post atau isu. Persona (emak-emak Bekasi, driver ojol, mahasiswa, buzzer, akun berita, dan lainnya) dinilai oleh [Jev](https://docs.typesafe.ai) dari TypeSafe: berhenti scroll atau tidak, aksi apa, dan bagaimana sikapnya. Hasilnya dibandingkan dengan komentar asli dari kasus nyata (Tapera, PPN 12%, UKT, MBG, dan lainnya).
 
