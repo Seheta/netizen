@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 HOST=root@31.97.66.253
 tar czf - --exclude='spike/results' --exclude='__pycache__' spike data web run.sh \
   | ssh "$HOST" "mkdir -p /root/netizen /var/www/moddestlab/netizen && tar xzf - --no-same-owner -C /root/netizen \
-    && cp /root/netizen/web/index.html /var/www/moddestlab/netizen/index.html \
+    && cp -r /root/netizen/web/. /var/www/moddestlab/netizen/ \
     && cd /root/netizen && [ -d .venv ] || python3 -m venv .venv \
     && .venv/bin/pip install -q 'typesafe-sdk>=0.7.5' \
     && (pm2 restart netizen >/dev/null 2>&1 || pm2 start run.sh --name netizen --interpreter bash) && pm2 save >/dev/null"

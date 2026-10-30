@@ -20,7 +20,7 @@ uv run spike/server.py                                                          
 uv run spike/backtest_youtube.py train                                            # uji terhadap komentar YouTube asli
 ```
 
-Post bisa berupa teks atau gambar (png/jpg, langsung dinilai Jev). Di web, sebuah post bisa dilanjutkan dengan **episode** berikutnya (klarifikasi, pembelaan, konten baru): persona diberi tahu post sebelumnya dan bagaimana reaksinya, dan timeline bisa mundur atau bercabang.
+Halaman web membuka dengan lima **contoh simulasi** (akun fiktif, isu nyata, hasil rekaman run asli di `web/samples/`, dibuat oleh `spike/record_samples.py`) yang bisa dilihat tanpa key. Post bisa berupa teks atau gambar (png/jpg, langsung dinilai Jev). Di web, sebuah post bisa dilanjutkan dengan **episode** berikutnya (klarifikasi, pembelaan, konten baru): persona diberi tahu post sebelumnya dan bagaimana reaksinya, dan timeline bisa mundur atau bercabang.
 
 `spike/personas.json`, `interest_segments.json`, `variants.json`, dan `influencers.json` adalah dunianya; `data/library/youtube_labels` adalah kasus nyata yang sudah dilabeli. Hasil run tersimpan di `spike/results/` (tidak di-commit).
 

@@ -94,9 +94,15 @@
   </div>
 
   <div class="panel">
+    <div id="samplesWrap" class="hide">
+      <span class="k" data-i18n="samples"></span>
+      <div class="row" id="samples"></div>
+      <div class="hint" style="margin-top:6px" data-i18n="samplesHint"></div>
+    </div>
     <div id="timelineWrap" class="hide">
       <span class="k" data-i18n="episodes"></span>
       <div class="row" id="timeline"></div>
+      <div class="note hide" id="sampleInfo" style="margin-top:8px"></div>
     </div>
     <div>
       <label class="k" for="text" id="postLabel"></label>
@@ -182,7 +188,9 @@ const I18N = {
     tokens: 'token input', cardEmpty: 'Klik salah satu karakter untuk melihat siapa dia dan bagaimana sikapnya.',
     noSim: 'Belum ada simulasi untuk persona ini.', stance: 'sikap', ofReaders: 'dari pembaca',
     tagEmpty: 'limbo · belum ada simulasi', tagWait: 'limbo · menunggu Jev…', tagRes: 'limbo', scenario: 'skenario', episode: 'episode',
-    legendTail: '· menunduk = tidak berhenti scroll', faces: ['marah', 'skeptis', 'cuek', 'setuju', 'antusias'], imagePost: '[post gambar]'
+    legendTail: '· menunduk = tidak berhenti scroll', faces: ['marah', 'skeptis', 'cuek', 'setuju', 'antusias'], imagePost: '[post gambar]',
+    samples: 'Contoh simulasi', samplesHint: 'Lima akun fiktif, isu nyata. Hasil rekaman run asli, bisa dilihat tanpa API key.',
+    sampleTag: 'contoh · rekaman', samplePost: 'Post contoh', sampleLoadFail: 'Contoh belum tersedia.'
   },
   en: {
     tagline: 'Indonesian netizen reaction simulator · personas judged by Jev (TypeSafe)', dark: 'Dark',
@@ -208,7 +216,9 @@ const I18N = {
     tokens: 'input tokens', cardEmpty: 'Click a character to see who they are and how they feel.',
     noSim: 'No simulation for this persona yet.', stance: 'stance', ofReaders: 'of readers',
     tagEmpty: 'limbo · no simulation yet', tagWait: 'limbo · waiting for Jev…', tagRes: 'limbo', scenario: 'scenario', episode: 'episode',
-    legendTail: '· head down = did not stop scrolling', faces: ['angry', 'skeptical', 'indifferent', 'agrees', 'excited'], imagePost: '[image post]'
+    legendTail: '· head down = did not stop scrolling', faces: ['angry', 'skeptical', 'indifferent', 'agrees', 'excited'], imagePost: '[image post]',
+    samples: 'Sample runs', samplesHint: 'Five fictional accounts, real issues. Recorded real runs, viewable without an API key.',
+    sampleTag: 'sample · recorded', samplePost: 'Sample post', sampleLoadFail: 'Sample not available yet.'
   }
 };
 let lang = 'id';
@@ -228,7 +238,7 @@ function setStatus(key) { statusKey = key; document.getElementById('status').tex
 
 // ---------- tema
 let theme = 'light';
-try { theme = localStorage.getItem('netizen.theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) {}
+try { theme = localStorage.getItem('netizen.theme') || 'light'; } catch (e) {}
 function applyTheme() {
   document.documentElement.dataset.theme = theme;
   document.getElementById('themeSw').checked = theme === 'dark';
@@ -473,7 +483,11 @@ function renderTimeline() {
   const chip = (n, label, cls) => `<button class="pill ${cls}" data-e="${n.id}" title="${title(n).replace(/"/g, '&quot;')}">${label}</button>`;
   $('timeline').innerHTML = chain.map((n, i) => chip(n, `${i + 1} · ${title(n).slice(0, 18)}${title(n).length > 18 ? '…' : ''}`, n.id === current ? 'on' : '')).join('') +
     kids.map(n => chip(n, `↳ ${title(n).slice(0, 18)}${title(n).length > 18 ? '…' : ''}`, 'branch')).join('');
+  const cur = node(current), info = $('sampleInfo');
+  if (cur && cur.sample) { info.classList.remove('hide'); info.innerHTML = `<b>${T('samplePost')}</b> · ${esc(cur.sample.account)} · ${esc(cur.sample.kind)} · ${esc(cur.sample.recorded)}<br>${esc(cur.text)}` + (cur.sample.subject ? `<br><span class="hint">${T('stance')}: ${esc(cur.sample.subject)}</span>` : ''); }
+  else info.classList.add('hide');
 }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 $('timeline').addEventListener('click', e => {
   const b = e.target.closest('.pill'); if (!b) return;
   current = b.dataset.e; result = node(current).result; followFrom = null; fresh = true;
@@ -494,7 +508,8 @@ function render() {
   for (const b of $('scenario').children) b.classList.toggle('on', b.dataset.s === scenario);
   $('scenarioHint').textContent = T({ niche: 'hintNiche', ramai: 'hintRamai', viral: 'hintViral' }[scenario]);
   const pl = result.platforms[viewPlatform], sc = pl.scenarios[scenario], v = sc.vocal;
-  $('tag').textContent = `${T('tagRes')} · ${viewPlatform} · ${T('scenario')} ${scenario === 'ramai' ? T('ramai') : scenario}` + (current && episodes.length > 1 ? ` · ${T('episode')} ${depthOf(current)}` : '');
+  const cur = node(current);
+  $('tag').textContent = `${T('tagRes')} · ${viewPlatform} · ${T('scenario')} ${scenario === 'ramai' ? T('ramai') : scenario}` + (current && episodes.length > 1 ? ` · ${T('episode')} ${depthOf(current)}` : '') + (cur && cur.sample ? ` · ${T('sampleTag')}` : '');
   $('bNeg').style.width = pct(v.negative) + '%'; $('bNeu').style.width = pct(v.neutral) + '%'; $('bPos').style.width = pct(v.positive) + '%';
   $('tNeg').textContent = `${pct(v.negative)}% ${T('against')}`; $('tNeu').textContent = `${pct(v.neutral)}% ${T('neutral')}`; $('tPos').textContent = `${pct(v.positive)}% ${T('support')}`;
   $('sReach').textContent = pct(sc.reach) + '%'; $('sNet').textContent = (sc.net >= 0 ? '+' : '') + sc.net.toFixed(2); $('sVir').textContent = pl.virality.toFixed(1);
@@ -534,6 +549,24 @@ $('go').addEventListener('click', async () => {
   $('tag').textContent = T('tagWait');
   setCast([]);
   poll(j.id, { id: j.id, parent: followFrom, text, image: !!imageB64, result: null });
+});
+
+// contoh simulasi: rekaman run asli dari spike/record_samples.py, bisa dilihat tanpa key
+fetch('samples/index.json').then(r => r.ok ? r.json() : []).then(list => {
+  if (!list.length) return;
+  $('samples').innerHTML = list.map(s => `<button class="pill" data-sample="${esc(s.id)}" style="text-align:left;line-height:1.2;padding:6px 13px"><b style="font-weight:600">${esc(s.account)}</b><span style="display:block;font-size:11px;opacity:.75">${esc(s.kind)}</span></button>`).join('');
+  $('samplesWrap').classList.remove('hide');
+}).catch(() => {});
+$('samples').addEventListener('click', async e => {
+  const b = e.target.closest('[data-sample]'); if (!b) return;
+  $('error').classList.add('hide');
+  const r = await fetch(`samples/${b.dataset.sample}.json`); if (!r.ok) return showError(T('sampleLoadFail'));
+  const s = await r.json();
+  episodes = []; let parent = null;
+  s.episodes.forEach((ep, i) => { const id = `${s.id}-${i + 1}`; episodes.push({ id, parent, text: ep.text, image: false, result: ep.result, sample: s }); parent = id; });
+  current = episodes[0].id; followFrom = null; result = episodes[0].result; fresh = true; selected = null;
+  for (const x of $('samples').children) x.classList.toggle('on', x.dataset.sample === s.id);
+  setStatus(''); renderMode(); renderTimeline(); render(); renderCard();
 });
 
 applyTheme(); applyLang();
