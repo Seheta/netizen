@@ -77,15 +77,17 @@ def gap(a: dict, b: dict) -> float:
     return sum(abs(a[k] - b[k]) for k in KEYS) / 2
 
 
-async def run_case(client, case: dict, general: list[dict], fams: dict, influencers: list[dict]) -> dict:
+async def run_case(client, case: dict, general: list[dict], fams: dict, influencers: list[dict], use_ctx: bool = True) -> dict:
     video = max(case["videos"], key=lambda v: sum(c["on_topic"] >= 0.5 for c in v["comments"]))
     text = f"Video YouTube berjudul \"{video['title']}\" dari channel {video['channel']}."
     if video.get("description"):
         text += f" Deskripsi: {video['description'][:400]}"
+    ctx = META[case["id"]].get("context", "") if use_ctx else ""
     post = {"id": case["id"], "platform": "YouTube", "post": text, "subject": case["subject"],
-            "messenger": META[case["id"]].get("messenger") or f"The YouTube channel {video['channel']}."}
+            "messenger": META[case["id"]].get("messenger") or f"The YouTube channel {video['channel']}.",
+            **({"context": ctx} if ctx else {})}
     members = [m for fam in fams.values() for m in fam]
-    fit, t_fit = await audience_fit(client, text, "", general + members, post["messenger"])
+    fit, t_fit = await audience_fit(client, text, "", general + members, post["messenger"], context=ctx)
     best = {sid: max(fit[m["id"]] for m in fam) for sid, fam in fams.items()}
     chosen_ids = sorted((s for s in fams if best[s] >= SEGMENT_MIN_FIT), key=lambda s: -best[s])[:MAX_SEGMENTS]
     personas = general + [m for sid in chosen_ids for m in fams[sid]]
@@ -110,6 +112,8 @@ async def run_case(client, case: dict, general: list[dict], fams: dict, influenc
 async def main() -> None:
     load_env()
     args = sys.argv[1:]
+    use_ctx = "--no-context" not in args  # cases.json `context` = the public mood of the time
+    args = [a for a in args if a != "--no-context"]
     only = set(SPLIT.get(args[0], args)) if args else set()
     cases = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(LABELS.glob("*.json"))
              if not only or p.stem in only]
@@ -121,7 +125,7 @@ async def main() -> None:
 
         async def guarded(c):
             async with sem:
-                return await run_case(client, c, general, fams, influencers)
+                return await run_case(client, c, general, fams, influencers, use_ctx)
         res = await asyncio.gather(*(guarded(c) for c in cases))
 
     # Saved before the report: a print failure (e.g. emoji on a cp1252 console) must not lose paid results.
@@ -146,6 +150,7 @@ async def main() -> None:
             kgaps[name].append(kg)
             if name == "niche":
                 print(f"  kinds niche  {short(m)}   gap {kg:.3f}")
+    print(f"\ncontext: {'on' if use_ctx else 'off'}")
     print("\nMean stance gap (real labeled by kinds): " + "  ".join(f"{n} {sum(g) / len(g):.3f}" for n, g in gaps.items()))
     print("Mean comment-kind gap:                   " + "  ".join(f"{n} {sum(g) / len(g):.3f}" for n, g in kgaps.items()))
     tokens = sum(r["tokens"] for r in res)

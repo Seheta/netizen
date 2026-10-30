@@ -103,12 +103,20 @@ def comment_kinds(about: str) -> dict[str, str]:
 # A follow-up episode: `earlier` lists what the same account posted before and how netizens reacted.
 EARLIER = ("This is a follow-up: `earlier` lists what the same account posted before and how netizens reacted "
            "to it; this person remembers that. ")
+# `context`: what the public already knows and feels about the issue when the post appears.
+CONTEXT = ("`context` describes what Indonesian netizens already know and feel about this issue right now, "
+           "before seeing `post`; this person has been exposed to that and reacts against that background. ")
 
 
-def persona_questions(pid: str, subject: str = "", has_messenger: bool = False, has_earlier: bool = False) -> dict:
+def prefix(has_earlier: bool, has_context: bool = False) -> str:
+    return (CONTEXT if has_context else "") + (EARLIER if has_earlier else "")
+
+
+def persona_questions(pid: str, subject: str = "", has_messenger: bool = False, has_earlier: bool = False,
+                      has_context: bool = False) -> dict:
     p = f"`personas.{pid}`"
     about = subject or GENERIC_SUBJECT
-    ctx = EARLIER if has_earlier else ""
+    ctx = prefix(has_earlier, has_context)
     # The subject is written into each instruction: a reference to a `subject` state field weakened
     # stances (boycott +1.4 inline vs +0.3 by reference), and a messenger who argues one side pulled
     # personas toward that side unless the question says it is about their own view.
@@ -137,18 +145,19 @@ def persona_questions(pid: str, subject: str = "", has_messenger: bool = False, 
             ),
             criteria=STANCE_LEVELS,
         ),
-        f"{pid}__comment": comment_question(p, about, has_messenger, has_earlier),
+        f"{pid}__comment": comment_question(p, about, has_messenger, has_earlier, has_context),
     }
 
 
-def comment_question(p: str, about: str, has_messenger: bool = False, has_earlier: bool = False) -> Choice:
+def comment_question(p: str, about: str, has_messenger: bool = False, has_earlier: bool = False,
+                     has_context: bool = False) -> Choice:
     # Stance and action are asked independently, so "comment_support" × "somewhat against" used to
     # count as a negative comment. Posted content takes its tone from this question instead.
     # Comments react to the speaker as much as to the issue (videos of a popular governor drew 90%+ praise).
     who = "`messenger`" if has_messenger else "the account that posted it and the people who appear in it"
     return Choice(
         instructions=(
-            f"{EARLIER if has_earlier else ''}Suppose the Indonesian netizen described in {p} does write a public comment under `post`. The subject "
+            f"{prefix(has_earlier, has_context)}Suppose the Indonesian netizen described in {p} does write a public comment under `post`. The subject "
             f"is {about}; the speaker is {who}. How this person feels about the speaker matters as much as the issue. "
             f"What would their comment mainly do?"
         ),
