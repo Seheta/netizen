@@ -16,6 +16,7 @@
   nav .brand { font-size: 28px; line-height: 1; }
   nav .sub { font-size: 12px; color: var(--muted); }
   nav .spacer { flex: 1; }
+  nav a.pill { min-height: 30px; display: inline-flex; align-items: center; text-decoration: none; }
   .sw { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; user-select: none; }
   .sw input { position: absolute; opacity: 0; width: 0; height: 0; }
   .sw .track { position: relative; width: 44px; height: 24px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); transition: background .2s; }
@@ -73,6 +74,8 @@
   <span class="brand hand">netizen</span>
   <span class="sub" data-i18n="tagline"></span>
   <span class="spacer"></span>
+  <a class="pill" href="https://github.com/Seheta/netizen" target="_blank" rel="noopener">GitHub</a>
+  <a class="pill" href="https://moddestlab.com" target="_blank" rel="noopener">Moddest Lab</a>
   <label class="sw"><input type="checkbox" id="themeSw"><span class="track"></span><span data-i18n="dark"></span></label>
   <label class="sw"><input type="checkbox" id="langSw"><span class="track"></span><span id="langLbl">EN</span></label>
 </nav>
